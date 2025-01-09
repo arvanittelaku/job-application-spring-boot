@@ -1,32 +1,45 @@
 package com.example.demo1.dtos.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.example.demo1.models.UserRole;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+//@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRegDto {
 
-    @NotNull(message = "Username is required")
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
-    private String username;
-    @NotNull
-    @NotBlank(message = "Password is required")
-    @NotNull(message = "Password is required")
-    @Size(min = 8, max = 40, message = "Password must be between 8 and 40 characters")
-    private String password;
-    @NotNull(message = "Email is required")
-    @NotBlank(message = "Email is required")
-    @Email
-    private String email;
+    //TODO: Add validation
+
+    @PositiveOrZero
+    private Long id;
+
     @NotNull(message = "Name is required")
     @NotBlank(message = "Name is required")
     @Size(min = 3, max = 20, message = "Name must be between 3 and 20 characters")
     private String name;
-    @NotNull(message = "Last name is required")
-    @NotBlank(message = "Last name is required")
-    @Size(min = 3, max = 20, message = "Last name must be between 3 and 20 characters")
     private String lastName;
+    private String username;
+    private String email;
+    private String password;
+    private String confirmPassword;
+    private String bio;
+    private LocalDateTime joinDate;
+    private LocalDate birthdate;
+    private String address;
+    private String city;
+    private String state;
+    private String country;
+    private String postalCode;
+    private String phone;
+    private String gender;
+    private String profileImage;
+    private UserRole role;
 
 }

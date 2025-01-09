@@ -1,0 +1,113 @@
+package com.example.demo1.controllers;
+
+import com.example.demo1.dtos.user.UserLoginDto;
+import com.example.demo1.dtos.user.UserRegDto;
+import com.example.demo1.exceptions.EmailExistException;
+import com.example.demo1.exceptions.UserNotFoundException;
+import com.example.demo1.exceptions.UsernameExistsException;
+import com.example.demo1.exceptions.WrongPasswordException;
+import com.example.demo1.models.User;
+import com.example.demo1.services.impls.UserServiceImpl;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@RequiredArgsConstructor
+@Controller
+public class AuthController {
+    private final UserServiceImpl userServiceImpl;
+
+    @GetMapping("/login")
+    public String loginForm(Model model) {
+        System.out.println("Login page called!");
+        model.addAttribute("loginRequestDto", new UserLoginDto());
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@Valid @ModelAttribute UserLoginDto loginRequestDto,
+                        BindingResult result,
+                        HttpServletRequest request,
+                        HttpServletResponse response,
+                        RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(System.out::println);
+            return "login";
+        }
+
+        try {
+            var searchUser = userServiceImpl.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+
+            Cookie cookie = new Cookie("username", String.valueOf(loginRequestDto.getUsername()));
+            cookie.setMaxAge(60 * 60 * 24 * 30); // 30 days
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false);
+            cookie.setDomain("localhost");
+            response.addCookie(cookie);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("user", searchUser);
+
+            return "redirect:/profile";
+        } catch (UserNotFoundException | WrongPasswordException e) {
+            redirectAttributes.addFlashAttribute("error", "Username or Password is incorrect!");
+            return "redirect:/login";
+        }
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+
+        Cookie cookie = new Cookie("username", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        HttpSession session = request.getSession(false);
+
+        session.invalidate();
+
+        return "redirect:/login";
+    }
+
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+        model.addAttribute("userRegDto", new UserRegDto());
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute UserRegDto userRegDto,
+                           BindingResult result,
+                           RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(System.out::println);
+            return "register";
+        }
+
+        try {
+            userServiceImpl.add(userRegDto);
+            redirectAttributes.addFlashAttribute("success", "You have been registered successfully.");
+            return "redirect:/login";
+        } catch (EmailExistException | UsernameExistsException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/register";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "redirect:/register";
+        }
+    }
+
+
+}

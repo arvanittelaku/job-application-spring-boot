@@ -1,4 +1,4 @@
-package com.example.jobapp.exceptions;
+package com.example.demo1.exceptions;
 
 public class EmailExistException extends RuntimeException{
 

@@ -3,7 +3,13 @@ package com.example.demo1.dtos.user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserLoginDto {
     @NotNull(message = "Username is required")
     @NotBlank(message = "Username is required")

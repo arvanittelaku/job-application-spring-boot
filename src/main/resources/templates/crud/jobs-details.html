@@ -7,22 +7,15 @@
 
 <div class="container">
     <div class="row">
-        <div th:each="job : ${jobs}" th:object="${job}" class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="*{title}"></h5>
-                    <p class="card-text" th:text="*{description}"></p>
-                    <p class="card-text">Salary: <span th:text="*{salary}"></span></p>
-                    <p class="card-text">Location: <span th:text="*{location}"></span></p>
-                    <p class="card-text">Contact: <span th:text="*{contact}"></span></p>
-                    <p class="card-text">Deadline: <span th:text="*{deadline}"></span></p>
-                </div>
-
-                <button class="btn btn-outline-success">
-                    <a th:href="@{jobs/view/{id}(id=*{id})}" class="btn btn-primary">View</a>
-                </button>
-            </div>
-        </div>
+       <div th:object="${jobDetailsDto}">
+           <div th:text="*{title}"></div>
+           <div th:text="*{location}"></div>
+           <div th:text="*{description}"></div>
+           <div th:text="*{salary}"></div>
+           <div th:text="*{deadline}"></div>
+           <div th:text="*{category}"></div>
+           <div th:text="*{jobOwner}"></div>
+       </div>
     </div>
 </div>
 </body>
