@@ -20,41 +20,52 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String lastName;
 
     @Column(nullable = false, unique = true)
     private String username;
-    @Column(nullable = false, unique = true)
+
+    @Column(nullable = true, unique = true)
     private String email;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private UserRole role;
+
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String bio;
-    @Column(nullable = false)
-    private String confirmPassword;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private LocalDateTime joinDate;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private LocalDate birthdate;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String address;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String city;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String state;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String country;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String postalCode;
-    @Column(nullable = false, unique = true)
+
+    @Column(nullable = true, unique = true)
     private String phone;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String gender;
 
     private String profileImage;

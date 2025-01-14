@@ -7,6 +7,7 @@ import com.example.demo1.dtos.user.UserUpdateReqDto;
 import com.example.demo1.exceptions.EmailExistException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.UsernameExistsException;
+import com.example.demo1.exceptions.WrongPasswordException;
 import com.example.demo1.mappers.UserMapper;
 import com.example.demo1.models.User;
 import com.example.demo1.repositories.UserRepository;
@@ -30,21 +31,32 @@ public class UserServiceImpl implements UserServices {
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User login(String username, String password) {
-        var user = userRepository.findByUsername(username);
-        if (user.isEmpty()){
-            throw new EntityNotFoundException("User not found");
+    public UserLoginDto login(UserLoginDto userLoginDto) {
+         User user = userRepository.findByUsername(userLoginDto.getUsername())
+                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+            throw new WrongPasswordException("Wrong password! Try again!");
         }
-        if (!passwordEncoder.matches(password, user.get().getPassword())) {
-            throw new EntityNotFoundException("User not found");
+
+        return userMapper.fromUser(user);
+    }
+
+    @Override
+    public UserRegDto register(UserRegDto userRegDto) {
+        if (userRepository.findByUsername(userRegDto.getUsername()).isPresent()) {
+            throw new UsernameExistsException("Username already exists");
         }
-        userMapper.fromLogin(user);
-        return user.get();
+
+        User user = userMapper.fromUserRegDtoToEntity(userRegDto);
+        user.setPassword(passwordEncoder.encode(userRegDto.getPassword()));
+
+        var savedUser = userRepository.save(user);
+        return userMapper.fromUserToReg(savedUser);
     }
 
 

@@ -2,9 +2,7 @@ package com.example.demo1.controllers;
 
 import com.example.demo1.dtos.job.JobCreateDto;
 import com.example.demo1.dtos.job.JobDeleteDto;
-import com.example.demo1.dtos.job.JobDetailsDto;
 import com.example.demo1.dtos.job.JobUpdateDto;
-import com.example.demo1.services.JobServices;
 import com.example.demo1.services.impls.JobServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("crud")
 @RequiredArgsConstructor
 @Controller
-public class JobMenagmentController {
+public class JobManagmentController {
     private final JobServiceImpl jobService;
 
     @GetMapping("/jobs")

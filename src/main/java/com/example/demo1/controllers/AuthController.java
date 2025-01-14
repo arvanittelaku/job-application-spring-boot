@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 @Controller
 public class AuthController {
+
     private final UserServiceImpl userServiceImpl;
 
     @GetMapping("/login")
@@ -41,31 +42,41 @@ public class AuthController {
                         HttpServletResponse response,
                         RedirectAttributes redirectAttributes) {
 
+        // Handle validation errors
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(System.out::println);
+            result.getAllErrors().forEach(error -> System.out.println("Validation Error: " + error.getDefaultMessage()));
             return "login";
         }
 
         try {
-            var searchUser = userServiceImpl.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+            // Attempt to log in the user
+            var searchUser = userServiceImpl.login(loginRequestDto);
 
-            Cookie cookie = new Cookie("username", String.valueOf(loginRequestDto.getUsername()));
+            // Set cookies for username
+            Cookie cookie = new Cookie("username", searchUser.getUsername());
             cookie.setMaxAge(60 * 60 * 24 * 30); // 30 days
             cookie.setPath("/");
             cookie.setHttpOnly(true);
             cookie.setSecure(false);
-            cookie.setDomain("localhost");
             response.addCookie(cookie);
 
+            // Create user session
             HttpSession session = request.getSession();
             session.setAttribute("user", searchUser);
 
             return "redirect:/profile";
+
         } catch (UserNotFoundException | WrongPasswordException e) {
+            // Add error flash attribute and redirect to login
             redirectAttributes.addFlashAttribute("error", "Username or Password is incorrect!");
+            return "redirect:/login";
+        } catch (Exception e) {
+            System.err.println("Unexpected Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
             return "redirect:/login";
         }
     }
+
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
@@ -88,26 +99,33 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute UserRegDto userRegDto,
-                           BindingResult result,
-                           RedirectAttributes redirectAttributes) {
+    public String register(
+            @Valid @ModelAttribute("userRegDto") UserRegDto userRegDto,
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
+
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(System.out::println);
+            result.getAllErrors().forEach(error -> System.out.println("Validation Error: " + error.getDefaultMessage()));
             return "register";
         }
 
         try {
-            userServiceImpl.add(userRegDto);
+            userServiceImpl.register(userRegDto);
+
             redirectAttributes.addFlashAttribute("success", "You have been registered successfully.");
             return "redirect:/login";
+
         } catch (EmailExistException | UsernameExistsException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/register";
+
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Unexpected Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
             return "redirect:/register";
         }
     }
+
 
 
 }
