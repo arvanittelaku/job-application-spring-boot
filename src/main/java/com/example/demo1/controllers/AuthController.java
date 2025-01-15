@@ -64,7 +64,7 @@ public class AuthController {
             HttpSession session = request.getSession();
             session.setAttribute("user", searchUser);
 
-            return "redirect:/profile";
+            return "redirect:/index";
 
         } catch (UserNotFoundException | WrongPasswordException e) {
             // Add error flash attribute and redirect to login

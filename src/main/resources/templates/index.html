@@ -4,9 +4,16 @@
 <body>
 <div th:replace="shared/_navbar :: navbar"></div>
 
+<!-- Profile Icon in Top Right -->
+<div style="position: absolute; top: 20px; right: 20px;">
+    <a th:href="@{/profile}" style="text-decoration: none; color: black;">
+        <img src="/imgs/profile-icon.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%;">
+    </a>
+</div>
 
 <div class="slider-active">
-    <div class="single-slider slider-height d-flex align-items-center" th:attr="style='background-image: url(/imgs/img.png); background-size: cover; background-position: center; height: 100vh; width: 100vw;'">
+    <div class="single-slider slider-height d-flex align-items-center"
+         th:attr="style='background-image: url(/imgs/img.png); background-size: cover; background-position: center; height: 100vh; width: 100vw;'">
         <div class="container">
             <div class="row">
                 <div class="col-xl-6 col-lg-9 col-md-10">
@@ -21,7 +28,7 @@
                     <!-- form -->
                     <form action="#" class="search-box">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Job Tittle or keyword">
+                            <input type="text" class="form-control" placeholder="Job Title or keyword">
                             <div class="input-group-append">
                                 <select class="custom-select" id="select1">
                                     <option value="">Prishtine</option>
@@ -43,16 +50,17 @@
 
 <div class="our-services section-pad-t30">
     <div class="container">
-        <!-- Section Tittle -->
+        <!-- Section Title -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-tittle text-center">
                     <span>FEATURED TOURS Packages</span>
-                    <h2>Browse Top Categories </h2>
+                    <h2>Browse Top Categories</h2>
                 </div>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
+            <!-- Example Job Category -->
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
                 <div class="single-services text-center mb-30">
                     <div class="services-ion">
@@ -64,83 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <div class="single-services text-center mb-30">
-                    <div class="services-ion">
-                        <span class="flaticon-cms"></span>
-                    </div>
-                    <div class="services-cap">
-                        <h5><a th:href="@{/jobs}">Design & Development</a></h5>
-                        <span>(658)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <div class="single-services text-center mb-30">
-                    <div class="services-ion">
-                        <span class="flaticon-report"></span>
-                    </div>
-                    <div class="services-cap">
-                        <h5><a th:href="@{/jobs}">Sales & Marketing</a></h5>
-                        <span>(658)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <div class="single-services text-center mb-30">
-                    <div class="services-ion">
-                        <span class="flaticon-app"></span>
-                    </div>
-                    <div class="services-cap">
-                        <h5><a th:href="@{/jobs}">Mobile Application</a></h5>
-                        <span>(658)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <div class="single-services text-center mb-30">
-                    <div class="services-ion">
-                        <span class="flaticon-helmet"></span>
-                    </div>
-                    <div class="services-cap">
-                        <h5><a th:href="@{/jobs}">Construction</a></h5>
-                        <span>(658)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <div class="single-services text-center mb-30">
-                    <div class="services-ion">
-                        <span class="flaticon-high-tech"></span>
-                    </div>
-                    <div class="services-cap">
-                        <h5><a th:href="@{/jobs}">Information Technology</a></h5>
-                        <span>(658)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <div class="single-services text-center mb-30">
-                    <div class="services-ion">
-                        <span class="flaticon-real-estate"></span>
-                    </div>
-                    <div class="services-cap">
-                        <h5><a th:href="@{/jobs}">Real Estate</a></h5>
-                        <span>(658)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <div class="single-services text-center mb-30">
-                    <div class="services-ion">
-                        <span class="flaticon-content"></span>
-                    </div>
-                    <div class="services-cap">
-                        <h5><a th:href="@{/jobs}">Content Writer</a></h5>
-                        <span>(658)</span>
-                    </div>
-                </div>
-            </div>
+            <!-- Add more categories as needed -->
         </div>
 
         <div class="row">

@@ -36,14 +36,14 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public UserLoginDto login(UserLoginDto userLoginDto) {
-         User user = userRepository.findByUsername(userLoginDto.getUsername())
-                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        User user = userRepository.findByUsername(userLoginDto.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
             throw new WrongPasswordException("Wrong password! Try again!");
         }
 
-        return userMapper.fromUser(user);
+        return userMapper.toLoginDto(user);
     }
 
     @Override
@@ -52,13 +52,12 @@ public class UserServiceImpl implements UserServices {
             throw new UsernameExistsException("Username already exists");
         }
 
-        User user = userMapper.fromUserRegDtoToEntity(userRegDto);
+        User user = userMapper.toEntity(userRegDto);
         user.setPassword(passwordEncoder.encode(userRegDto.getPassword()));
 
         var savedUser = userRepository.save(user);
-        return userMapper.fromUserToReg(savedUser);
+        return userMapper.toRegDto(savedUser);
     }
-
 
     @Override
     public boolean changePassword(UserUpdateReqDto userUpdateReqDto) {
@@ -67,7 +66,7 @@ public class UserServiceImpl implements UserServices {
             throw new EntityNotFoundException("User not found");
         }
 
-        var user = userMapper.fromUpdateReqDto(userUpdateReqDto);
+        var user = userMapper.toEntity(userUpdateReqDto);
         user.setPassword(passwordEncoder.encode(userUpdateReqDto.getPassword()));
         userRepository.save(user);
 
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public User add(UserRegDto userRegDto) {
-        var user = userMapper.fromUserRegDtoToEntity(userRegDto);
+        var user = userMapper.toEntity(userRegDto);
 
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new UsernameExistsException("Username already exists");
@@ -86,18 +85,13 @@ public class UserServiceImpl implements UserServices {
         }
 
         user.setPassword(passwordEncoder.encode(userRegDto.getPassword()));
-        var savedUser = userRepository.save(user);
-        return savedUser;
+        return userRepository.save(user);
     }
-
 
     @Override
     public User find(UserListDto user) {
-        var exist = userRepository.findById(user.getId());
-        if (exist.isEmpty()) {
-            throw new EntityNotFoundException("User not found");
-        }
-        return exist.get();
+        return userRepository.findById(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     @Override
@@ -106,7 +100,7 @@ public class UserServiceImpl implements UserServices {
         if (exist.isEmpty()) {
             throw new EntityNotFoundException("User not found");
         }
-        var user = userMapper.fromUpdateReqDto(userUpdateReqDto);
+        var user = userMapper.toEntity(userUpdateReqDto);
         return userRepository.save(user);
     }
 

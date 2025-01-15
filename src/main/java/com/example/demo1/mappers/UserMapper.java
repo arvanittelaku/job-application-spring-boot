@@ -15,26 +15,17 @@ import java.util.Optional;
 public interface UserMapper extends SimpleMapper<User,UserRegDto> {
 
 
-    User fromLogin (Optional<User> userLoginDto);
+    UserLoginDto toLoginDto(User user);
 
-    UserLoginDto fromUser (User user);
+    User toEntity(UserRegDto userRegDto);
 
-    User fromUserRegDtoToEntity (UserRegDto userRegDto);
+    UserRegDto toRegDto(User user);
 
-    UserRegDto fromUserToReg (User user);
+    User toEntity(UserUpdateReqDto userUpdateReqDto);
 
-    User fromUpdateReqDto (UserUpdateReqDto userUpdateReqDto);
+    UserUpdateReqDto toUpdateDto(User user);
 
-    UserUpdateReqDto fromUserToUpdate (User user);
+    UserProfile toProfileDto(User user);
 
-    User fromUserProfile (UserProfile userProfile);
-
-    UserProfile fromUserToProfile (User user);
-
-    UserProfile fromUserToUpdateProfile (User user);
-
-    User fromUpdateProfile (UserUpdateReqDto userUpdateReqDto);
-
-
-
+    User toEntity(UserProfile userProfile);
 }
