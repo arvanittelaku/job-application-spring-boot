@@ -1,9 +1,6 @@
 package com.example.demo1.services.impls;
 
-import com.example.demo1.dtos.user.UserListDto;
-import com.example.demo1.dtos.user.UserLoginDto;
-import com.example.demo1.dtos.user.UserRegDto;
-import com.example.demo1.dtos.user.UserUpdateReqDto;
+import com.example.demo1.dtos.user.*;
 import com.example.demo1.exceptions.EmailExistException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.UsernameExistsException;
@@ -14,6 +11,7 @@ import com.example.demo1.repositories.UserRepository;
 import com.example.demo1.services.UserServices;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,8 +41,10 @@ public class UserServiceImpl implements UserServices {
             throw new WrongPasswordException("Wrong password! Try again!");
         }
 
+        // Map the `User` entity to `UserLoginDto`
         return userMapper.toLoginDto(user);
     }
+
 
     @Override
     public UserRegDto register(UserRegDto userRegDto) {
@@ -57,6 +57,28 @@ public class UserServiceImpl implements UserServices {
 
         var savedUser = userRepository.save(user);
         return userMapper.toRegDto(savedUser);
+    }
+
+    @Override
+    public UserProfile updateProfile(UserProfile userProfile) {
+        User user = userRepository.findByUsername(userProfile.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        user.setName(userProfile.getName());
+        user.setLastName(userProfile.getLastName());
+        user.setPhone(userProfile.getPhone());
+        user.setEmail(userProfile.getEmail());
+        user.setBio(userProfile.getBio());
+
+        return userMapper.toProfileDto(user);
+    }
+
+    @Override
+    public UserProfile getProfileDetails(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return userMapper.toProfileDto(user);
     }
 
     @Override

@@ -12,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfile {
+
     @NotNull(message = "Name is required")
     @NotBlank(message = "Name is required")
     @Size(min = 3, max = 20, message = "Name must be between 3 and 20 characters")
@@ -20,10 +21,10 @@ public class UserProfile {
     @NotBlank(message = "Last name is required")
     @Size(min = 3, max = 20, message = "Last name must be between 3 and 20 characters")
     private String lastName;
-    @NotNull(message = "Username is required")
-    @NotBlank(message = "Username is required")
+
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
     private String username;
+
     @NotNull(message = "Email is required")
     @NotBlank(message = "Email is required")
     @Email

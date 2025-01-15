@@ -1,11 +1,13 @@
 package com.example.demo1.controllers;
 
 import com.example.demo1.dtos.user.UserLoginDto;
+import com.example.demo1.dtos.user.UserProfile;
 import com.example.demo1.dtos.user.UserRegDto;
 import com.example.demo1.exceptions.EmailExistException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.UsernameExistsException;
 import com.example.demo1.exceptions.WrongPasswordException;
+import com.example.demo1.mappers.UserMapper;
 import com.example.demo1.models.User;
 import com.example.demo1.services.impls.UserServiceImpl;
 import jakarta.servlet.http.Cookie;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthController {
 
     private final UserServiceImpl userServiceImpl;
+    private final UserMapper userMapper;
 
     @GetMapping("/login")
     public String loginForm(Model model) {
@@ -46,6 +50,23 @@ public class AuthController {
         if (result.hasErrors()) {
             result.getAllErrors().forEach(error -> System.out.println("Validation Error: " + error.getDefaultMessage()));
             return "login";
+        }
+
+        try {
+            UserProfile userProfile = userMapper.toUserProfile(new UserLoginDto(loginRequestDto.getUsername(), loginRequestDto.getPassword()));
+
+
+            if (userProfile.getName() == null || userProfile.getLastName() == null ||
+                    userProfile.getPhone() == null || userProfile.getEmail() == null) {
+
+                HttpSession session = request.getSession();
+                session.setAttribute("user", userProfile);
+
+                return "redirect:/profile/update";
+            }
+        } catch (UserNotFoundException | WrongPasswordException e) {
+            redirectAttributes.addFlashAttribute("error", "Username or Password is incorrect!");
+            return "redirect:/login";
         }
 
         try {
@@ -126,6 +147,41 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/profile/update")
+    public String updateProfile(HttpSession session, Model model){
+
+        UserLoginDto user = (UserLoginDto) session.getAttribute("user");
+
+        if(user == null){
+            return "redirect:/login";
+        }
+        UserProfile userProfile = userServiceImpl.getProfileDetails(user.getUsername());
+        model.addAttribute("userProfile", userProfile);
+        return "profile_update";
+    }
+
+    @PostMapping("/profile/update")
+    public String updateProfile(@Valid @ModelAttribute UserProfile userProfile,
+                                BindingResult result,
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes){
+
+        if(result.hasErrors()){
+            result.getAllErrors().forEach(System.out::println);
+            return "profile_update";
+        }
+
+        try {
+            UserProfile updatedProfile = userServiceImpl.updateProfile(userProfile);
+            session.setAttribute("user", updatedProfile);
+            redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
+            return "redirect:/profile";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+            return "redirect:/profile/update";
+        }
+
+    }
 
 
 }

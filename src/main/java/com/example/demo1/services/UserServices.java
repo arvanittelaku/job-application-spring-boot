@@ -1,9 +1,6 @@
 package com.example.demo1.services;
 
-import com.example.demo1.dtos.user.UserListDto;
-import com.example.demo1.dtos.user.UserLoginDto;
-import com.example.demo1.dtos.user.UserRegDto;
-import com.example.demo1.dtos.user.UserUpdateReqDto;
+import com.example.demo1.dtos.user.*;
 import com.example.demo1.models.User;
 import com.example.demo1.services.baseService.Addable;
 import com.example.demo1.services.baseService.Findable;
@@ -18,4 +15,8 @@ public interface UserServices extends Findable<UserListDto, User>, Addable<UserR
     UserRegDto register(UserRegDto userRegDto);
 
     boolean changePassword(UserUpdateReqDto userUpdateReqDto);
+
+    UserProfile updateProfile(UserProfile userProfile);
+
+    UserProfile getProfileDetails(String username);
 }
