@@ -4,130 +4,98 @@
 <body>
 <div th:replace="shared/_navbar :: navbar"></div>
 
-<div class="container">
+<div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2>Register</h2>
+            <h2 class="text-center mb-4">Register</h2>
             <form th:action="@{/register}" th:object="${userRegDto}" method="post">
-
-<!--                <div class="form-group">-->
-<!--                    <input type="hidden" th:field="*{id}" class="form-control" placeholder="Enter username">-->
-<!--                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red">Username error</span>-->
-<!--                </div>-->
-                <div class="form-group">
+                <!-- Username -->
+                <div class="form-group mb-3">
                     <label for="username">Username</label>
-                    <input type="text" th:field="*{username}" class="form-control" placeholder="Enter username">
-                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red">Username error</span>
+                    <input type="text" th:field="*{username}" class="form-control" placeholder="Enter username" required>
+                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></span>
                 </div>
 
-                <div class="form-group">
+                <!-- Password -->
+                <div class="form-group mb-3">
                     <label for="password">Password</label>
-                    <input type="password" th:field="*{password}" class="form-control" placeholder="Enter password">
-                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red">Password error</span>
+                    <input type="password" th:field="*{password}" class="form-control" placeholder="Enter password" required>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
                 </div>
 
-                <div class="form-group">
+                <!-- Confirm Password -->
+                <div class="form-group mb-3">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" th:field="*{confirmPassword}" class="form-control" placeholder="Confirm your password">
-                    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" style="color: red">Password confirmation error</span>
+                    <input type="password" th:field="*{confirmPassword}" class="form-control" placeholder="Confirm your password" required>
+                    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger"></span>
                 </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="name">Name</label>-->
-<!--                    <input type="text" th:field="*{name}" class="form-control" placeholder="Enter your first name">-->
-<!--                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red">Name error</span>-->
-<!--                </div>-->
+                <!-- Name -->
+                <div class="form-group mb-3">
+                    <label for="name">First Name</label>
+                    <input type="text" th:field="*{name}" class="form-control" placeholder="Enter your first name" required>
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="lastName">Last Name</label>-->
-<!--                    <input type="text" th:field="*{lastName}" class="form-control" placeholder="Enter your last name">-->
-<!--                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: red">Last name error</span>-->
-<!--                </div>-->
+                <!-- Last Name -->
+                <div class="form-group mb-3">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" th:field="*{lastName}" class="form-control" placeholder="Enter your last name" required>
+                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="address">Address</label>-->
-<!--                    <input type="text" th:field="*{address}" class="form-control" placeholder="Enter your address">-->
-<!--                    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" style="color: red">Address error</span>-->
-<!--                </div>-->
+                <!-- Email -->
+                <div class="form-group mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" th:field="*{email}" class="form-control" placeholder="Enter your email" required>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="country">Country</label>-->
-<!--                    <input type="text" th:field="*{country}" class="form-control" placeholder="Enter your country">-->
-<!--                    <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red">Country error</span>-->
-<!--                </div>-->
+                <!-- Phone -->
+                <div class="form-group mb-3">
+                    <label for="phone">Phone</label>
+                    <input type="text" th:field="*{phone}" class="form-control" placeholder="Enter your phone number" required>
+                    <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="city">City</label>-->
-<!--                    <input type="text" th:field="*{city}" class="form-control" placeholder="Enter your city">-->
-<!--                    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: red">City error</span>-->
-<!--                </div>-->
+                <!-- Address -->
+                <div class="form-group mb-3">
+                    <label for="address">Address</label>
+                    <input type="text" th:field="*{address}" class="form-control" placeholder="Enter your address" required>
+                    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="state">State</label>-->
-<!--                    <input type="text" th:field="*{state}" class="form-control" placeholder="Enter your state">-->
-<!--                    <span th:if="${#fields.hasErrors('state')}" th:errors="*{state}" style="color: red">State error</span>-->
-<!--                </div>-->
+                <!-- Country -->
+                <div class="form-group mb-3">
+                    <label for="country">Country</label>
+                    <input type="text" th:field="*{country}" class="form-control" placeholder="Enter your country" required>
+                    <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="email">Email</label>-->
-<!--                    <input type="email" th:field="*{email}" class="form-control" placeholder="Enter your email">-->
-<!--                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">Email error</span>-->
-<!--                </div>-->
+                <!-- City -->
+                <div class="form-group mb-3">
+                    <label for="city">City</label>
+                    <input type="text" th:field="*{city}" class="form-control" placeholder="Enter your city" required>
+                    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="role">Role</label>-->
-<!--                    <select th:field="*{role}" class="form-control">-->
-<!--                        <option value="JOB_SEEKER">Job Seeker</option>-->
-<!--                        <option value="JOB_OWNER">Job Owner</option>-->
-<!--                    </select>-->
-<!--                    <span th:if="${#fields.hasErrors('role')}" th:errors="*{role}" style="color: red">Role error</span>-->
-<!--                </div>-->
+                <!-- State -->
+                <div class="form-group mb-3">
+                    <label for="state">State</label>
+                    <input type="text" th:field="*{state}" class="form-control" placeholder="Enter your state" required>
+                    <span th:if="${#fields.hasErrors('state')}" th:errors="*{state}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="phone">Phone Number</label>-->
-<!--                    <input type="text" th:field="*{phone}" class="form-control" placeholder="Enter your phone number">-->
-<!--                    <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" style="color: red">Phone number error</span>-->
-<!--                </div>-->
+                <!-- Postal Code -->
+                <div class="form-group mb-3">
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" th:field="*{postalCode}" class="form-control" placeholder="Enter your postal code" required>
+                    <span th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}" class="text-danger"></span>
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label for="birthdate">Birthdate</label>-->
-<!--                    <input type="date" th:field="*{birthdate}" class="form-control" placeholder="Enter your birthdate">-->
-<!--                    <span th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}" style="color: red">Birthdate error</span>-->
-<!--                </div>-->
-
-<!--                <div class="form-group">-->
-<!--                    <label for="gender">Gender</label>-->
-<!--                    <input type="text" th:field="*{gender}" class="form-control" placeholder="Enter your gender">-->
-<!--                    <span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" style="color: red">Gender error</span>-->
-<!--                </div>-->
-
-<!--                <div class="form-group">-->
-<!--                    <label for="postalCode">Postal Code</label>-->
-<!--                    <input type="text" th:field="*{postalCode}" class="form-control" placeholder="Enter your postal code">-->
-<!--                    <span th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}" style="color: red">Postal code error</span>-->
-<!--                </div>-->
-
-<!--                <div class="form-group">-->
-<!--                    <label for="profileImage">Profile Image</label>-->
-<!--                    <input type="file" th:field="*{profileImage}" class="form-control">-->
-<!--                    <span th:if="${#fields.hasErrors('profileImage')}" th:errors="*{profileImage}" style="color: red">Profile image error</span>-->
-<!--                </div>-->
-
-<!--                <div class="form-group">-->
-<!--                    <label for="bio">Bio</label>-->
-<!--                    <textarea th:field="*{bio}" class="form-control" placeholder="Enter your bio"></textarea>-->
-<!--                    <span th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}" style="color: red">Bio error</span>-->
-<!--                </div>-->
-
-<!--                <div class="form-group">-->
-<!--                    <label for="joinDate">Join Date</label>-->
-<!--                    <input type="datetime-local" th:field="*{joinDate}" class="form-control" placeholder="Enter join date">-->
-<!--                    <span th:if="${#fields.hasErrors('joinDate')}" th:errors="*{joinDate}" style="color: red">Join date error</span>-->
-<!--                </div>-->
-
-                <button type="submit" class="btn btn-primary">Register</button>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100">Register</button>
             </form>
-
         </div>
     </div>
 </div>

@@ -55,19 +55,6 @@ public class AuthController {
             // Log in the user and retrieve their profile
             User searchUser = userServiceImpl.login(loginRequestDto);
 
-            // Map User to UserProfile
-            UserProfile userProfile = userMapper.toUserProfile(searchUser);
-
-            // Check if profile fields are missing
-            if (userProfile.getName() == null || userProfile.getLastName() == null ||
-                    userProfile.getPhone() == null || userProfile.getEmail() == null) {
-
-                HttpSession session = request.getSession();
-                session.setAttribute("user", userProfile);
-
-                return "redirect:/profile/update"; // Redirect to profile update
-            }
-
             // Set cookies for username
             Cookie cookie = new Cookie("username", searchUser.getUsername());
             cookie.setMaxAge(60 * 60 * 24 * 30); // 30 days
@@ -78,7 +65,7 @@ public class AuthController {
 
             // Create user session
             HttpSession session = request.getSession();
-            session.setAttribute("user", userProfile);
+            session.setAttribute("user", userMapper.toUserProfile(searchUser));
 
             return "redirect:/index";
 
@@ -91,6 +78,7 @@ public class AuthController {
             return "redirect:/login";
         }
     }
+
 
 
 
@@ -143,49 +131,49 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/profile/update")
-    public String updateProfile(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        // Retrieve the user from the session
-        UserProfile userProfile = (UserProfile) session.getAttribute("user");
+//    @GetMapping("/profile/update")
+//    public String updateProfile(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+//        // Retrieve the user from the session
+//        UserProfile userProfile = (UserProfile) session.getAttribute("user");
+//
+//        // If the user is not in the session, redirect to login
+//        if (userProfile == null) {
+//            redirectAttributes.addFlashAttribute("error", "Please log in to update your profile.");
+//            return "redirect:/login";
+//        }
+//
+//        // Add the userProfile to the model for the form
+//        model.addAttribute("userProfile", userProfile);
+//
+//        // Return the profile update view
+//        return "profile_update";
+//    }
 
-        // If the user is not in the session, redirect to login
-        if (userProfile == null) {
-            redirectAttributes.addFlashAttribute("error", "Please log in to update your profile.");
-            return "redirect:/login";
-        }
-
-        // Add the userProfile to the model for the form
-        model.addAttribute("userProfile", userProfile);
-
-        // Return the profile update view
-        return "profile_update";
-    }
-
-    @PostMapping("/profile/update")
-    public String updateProfile(@Valid @ModelAttribute UserProfile userProfile,
-                                BindingResult result,
-                                HttpSession session,
-                                RedirectAttributes redirectAttributes) {
-
-        // Check for validation errors
-        if (result.hasErrors()) {
-            result.getAllErrors().forEach(System.out::println);
-            return "profile_update";
-        }
-
-        try {
-            // Update the user's profile
-            User updatedUser = userServiceImpl.updateProfile(userProfile); // Ensure `updateProfile` updates in DB
-            UserProfile updatedProfile = userMapper.toUserProfile(updatedUser);
-            session.setAttribute("user", updatedProfile);
-
-            redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
-            return "redirect:/index";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
-            return "redirect:/profile/update";
-        }
-    }
+//    @PostMapping("/profile/update")
+//    public String updateProfile(@Valid @ModelAttribute UserProfile userProfile,
+//                                BindingResult result,
+//                                HttpSession session,
+//                                RedirectAttributes redirectAttributes) {
+//
+//        // Check for validation errors
+//        if (result.hasErrors()) {
+//            result.getAllErrors().forEach(System.out::println);
+//            return "profile_update";
+//        }
+//
+//        try {
+//            // Update the user's profile
+//            User updatedUser = userServiceImpl.updateProfile(userProfile); // Ensure `updateProfile` updates in DB
+//            UserProfile updatedProfile = userMapper.toUserProfile(updatedUser);
+//            session.setAttribute("user", updatedProfile);
+//
+//            redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
+//            return "redirect:/index";
+//        } catch (Exception e) {
+//            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+//            return "redirect:/profile/update";
+//        }
+//    }
 
 
 
