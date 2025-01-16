@@ -7,7 +7,7 @@ import com.example.demo1.exceptions.EmailExistException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.UsernameExistsException;
 import com.example.demo1.exceptions.WrongPasswordException;
-import com.example.demo1.mappers.UserMapper;
+import com.example.demo1.mappers.UserMapperImpl;
 import com.example.demo1.models.User;
 import com.example.demo1.services.impls.UserServiceImpl;
 import jakarta.servlet.http.Cookie;
@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +29,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthController {
 
     private final UserServiceImpl userServiceImpl;
-    private final UserMapper userMapper;
+    private final UserMapperImpl userMapper;
+
 
     @GetMapping("/login")
     public String loginForm(Model model) {
@@ -46,32 +46,27 @@ public class AuthController {
                         HttpServletResponse response,
                         RedirectAttributes redirectAttributes) {
 
-        // Handle validation errors
         if (result.hasErrors()) {
             result.getAllErrors().forEach(error -> System.out.println("Validation Error: " + error.getDefaultMessage()));
             return "login";
         }
 
         try {
-            UserProfile userProfile = userMapper.toUserProfile(new UserLoginDto(loginRequestDto.getUsername(), loginRequestDto.getPassword()));
+            // Log in the user and retrieve their profile
+            User searchUser = userServiceImpl.login(loginRequestDto);
 
+            // Map User to UserProfile
+            UserProfile userProfile = userMapper.toUserProfile(searchUser);
 
+            // Check if profile fields are missing
             if (userProfile.getName() == null || userProfile.getLastName() == null ||
                     userProfile.getPhone() == null || userProfile.getEmail() == null) {
 
                 HttpSession session = request.getSession();
                 session.setAttribute("user", userProfile);
 
-                return "redirect:/profile/update";
+                return "redirect:/profile/update"; // Redirect to profile update
             }
-        } catch (UserNotFoundException | WrongPasswordException e) {
-            redirectAttributes.addFlashAttribute("error", "Username or Password is incorrect!");
-            return "redirect:/login";
-        }
-
-        try {
-            // Attempt to log in the user
-            var searchUser = userServiceImpl.login(loginRequestDto);
 
             // Set cookies for username
             Cookie cookie = new Cookie("username", searchUser.getUsername());
@@ -83,12 +78,11 @@ public class AuthController {
 
             // Create user session
             HttpSession session = request.getSession();
-            session.setAttribute("user", searchUser);
+            session.setAttribute("user", userProfile);
 
             return "redirect:/index";
 
         } catch (UserNotFoundException | WrongPasswordException e) {
-            // Add error flash attribute and redirect to login
             redirectAttributes.addFlashAttribute("error", "Username or Password is incorrect!");
             return "redirect:/login";
         } catch (Exception e) {
@@ -97,6 +91,8 @@ public class AuthController {
             return "redirect:/login";
         }
     }
+
+
 
 
     @PostMapping("/logout")
@@ -148,15 +144,20 @@ public class AuthController {
     }
 
     @GetMapping("/profile/update")
-    public String updateProfile(HttpSession session, Model model){
+    public String updateProfile(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        // Retrieve the user from the session
+        UserProfile userProfile = (UserProfile) session.getAttribute("user");
 
-        UserLoginDto user = (UserLoginDto) session.getAttribute("user");
-
-        if(user == null){
+        // If the user is not in the session, redirect to login
+        if (userProfile == null) {
+            redirectAttributes.addFlashAttribute("error", "Please log in to update your profile.");
             return "redirect:/login";
         }
-        UserProfile userProfile = userServiceImpl.getProfileDetails(user.getUsername());
+
+        // Add the userProfile to the model for the form
         model.addAttribute("userProfile", userProfile);
+
+        // Return the profile update view
         return "profile_update";
     }
 
@@ -164,24 +165,28 @@ public class AuthController {
     public String updateProfile(@Valid @ModelAttribute UserProfile userProfile,
                                 BindingResult result,
                                 HttpSession session,
-                                RedirectAttributes redirectAttributes){
+                                RedirectAttributes redirectAttributes) {
 
-        if(result.hasErrors()){
+        // Check for validation errors
+        if (result.hasErrors()) {
             result.getAllErrors().forEach(System.out::println);
             return "profile_update";
         }
 
         try {
-            UserProfile updatedProfile = userServiceImpl.updateProfile(userProfile);
+            // Update the user's profile
+            User updatedUser = userServiceImpl.updateProfile(userProfile); // Ensure `updateProfile` updates in DB
+            UserProfile updatedProfile = userMapper.toUserProfile(updatedUser);
             session.setAttribute("user", updatedProfile);
+
             redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
-            return "redirect:/profile";
+            return "redirect:/index";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
             return "redirect:/profile/update";
         }
-
     }
+
 
 
 }

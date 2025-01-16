@@ -10,13 +10,11 @@ import com.example.demo1.services.baseService.Removable;
 public interface UserServices extends Findable<UserListDto, User>, Addable<UserRegDto, User>,
         Modifiable<UserUpdateReqDto, User>, Removable<UserListDto>
 {
-    UserLoginDto login(UserLoginDto userLoginDto);
+    User login(UserLoginDto userLoginDto);
 
     UserRegDto register(UserRegDto userRegDto);
 
+    User updateProfile(UserProfile userProfile);
+
     boolean changePassword(UserUpdateReqDto userUpdateReqDto);
-
-    UserProfile updateProfile(UserProfile userProfile);
-
-    UserProfile getProfileDetails(String username);
 }

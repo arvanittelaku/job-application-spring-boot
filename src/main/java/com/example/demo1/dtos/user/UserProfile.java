@@ -1,5 +1,8 @@
 package com.example.demo1.dtos.user;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +16,10 @@ import lombok.*;
 @AllArgsConstructor
 public class UserProfile {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     @NotNull(message = "Name is required")
     @NotBlank(message = "Name is required")
     @Size(min = 3, max = 20, message = "Name must be between 3 and 20 characters")
@@ -21,10 +28,10 @@ public class UserProfile {
     @NotBlank(message = "Last name is required")
     @Size(min = 3, max = 20, message = "Last name must be between 3 and 20 characters")
     private String lastName;
-
+//    @NotNull(message = "Username is required")
+//    @NotBlank(message = "Username is required")
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
     private String username;
-
     @NotNull(message = "Email is required")
     @NotBlank(message = "Email is required")
     @Email

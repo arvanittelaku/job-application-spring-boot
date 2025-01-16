@@ -11,7 +11,6 @@ import com.example.demo1.repositories.UserRepository;
 import com.example.demo1.services.UserServices;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,17 +31,17 @@ public class UserServiceImpl implements UserServices {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public UserLoginDto login(UserLoginDto userLoginDto) {
+    public User login(UserLoginDto userLoginDto) {
+        // Fetch the User entity from the database
         User user = userRepository.findByUsername(userLoginDto.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
+        // Verify the password
         if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-            throw new WrongPasswordException("Wrong password! Try again!");
+            throw new WrongPasswordException("Invalid password!");
         }
 
-        // Map the `User` entity to `UserLoginDto`
-        return userMapper.toLoginDto(user);
+        return user; // Return the User object
     }
 
 
@@ -60,26 +59,22 @@ public class UserServiceImpl implements UserServices {
     }
 
     @Override
-    public UserProfile updateProfile(UserProfile userProfile) {
-        User user = userRepository.findByUsername(userProfile.getUsername())
+    public User updateProfile(UserProfile userProfile) {
+        // Fetch the existing user from the database
+        User existingUser = userRepository.findById(userProfile.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        user.setName(userProfile.getName());
-        user.setLastName(userProfile.getLastName());
-        user.setPhone(userProfile.getPhone());
-        user.setEmail(userProfile.getEmail());
-        user.setBio(userProfile.getBio());
+        // Update the user's fields
+        existingUser.setName(userProfile.getName());
+        existingUser.setLastName(userProfile.getLastName());
+        existingUser.setPhone(userProfile.getPhone());
+        existingUser.setEmail(userProfile.getEmail());
+        existingUser.setBio(userProfile.getBio());
 
-        return userMapper.toProfileDto(user);
+        // Save and return the updated user
+        return userRepository.save(existingUser);
     }
 
-    @Override
-    public UserProfile getProfileDetails(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        return userMapper.toProfileDto(user);
-    }
 
     @Override
     public boolean changePassword(UserUpdateReqDto userUpdateReqDto) {

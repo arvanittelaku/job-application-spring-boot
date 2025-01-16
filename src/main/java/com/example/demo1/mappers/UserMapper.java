@@ -27,7 +27,7 @@ public interface UserMapper extends SimpleMapper<User,UserRegDto> {
 
     UserProfile toProfileDto(User user);
 
-    UserProfile toUserProfile(UserLoginDto userLoginDto);
+    UserProfile toUserProfile(User user);
 
     User toEntity(UserProfile userProfile);
 }
