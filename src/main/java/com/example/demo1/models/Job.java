@@ -15,29 +15,41 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class Job {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     @Column(nullable = false)
     private String jobOwner;
+
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false)
     private String description;
+
     @Column(nullable = false)
     private String location;
+
     @Column(nullable = false)
     private double salary;
+
     @Column(nullable = false)
     private String requirements;
+
     @Column(nullable = false)
     private JobCategory category;
+
     @Column(nullable = false)
     private LocalDateTime deadline;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
     @Column()
     private int applicants;
 
