@@ -11,6 +11,5 @@ import lombok.*;
 @AllArgsConstructor
 public class JobDeleteDto {
     @NotNull(message = "Id is required")
-    @NotBlank(message = "Id is required")
     private Long id;
 }

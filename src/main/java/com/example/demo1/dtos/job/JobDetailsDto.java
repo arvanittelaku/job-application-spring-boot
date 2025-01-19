@@ -13,51 +13,36 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobDetailsDto {
-    @NotNull(message = "Job owner is required")
-    @NotBlank(message = "Job owner is required")
-    @Size(min = 3, max = 20, message = "Job owner must be between 3 and 20 characters")
-    private String jobOwner;
-    @NotNull(message = "Email is required")
-    @NotBlank(message = "Email is required")
-    @Email
-    private String email;
+public class JobDetailsDto extends CompanyDto {
     @NotNull(message = "Title is required")
     @NotBlank(message = "Title is required")
     @Size(min = 3, max = 20, message = "Title must be between 3 and 20 characters")
     private String title;
+
     @NotNull(message = "Description is required")
     @NotBlank(message = "Description is required")
-    @Size(min = 10, max = 70, message = "Description must be between 3 and 20 characters")
+    @Size(min = 10, max = 70, message = "Description must be between 10 and 70 characters")
     private String description;
+
     @NotNull(message = "Location is required")
     @NotBlank(message = "Location is required")
     @Size(min = 3, max = 20, message = "Location must be between 3 and 20 characters")
     private String location;
+
     @NotNull(message = "Salary is required")
-    @NotBlank(message = "Salary is required")
-    @Size(min = 3, max = 20, message = "Salary must be between 3 and 20 characters")
     private double salary;
-    @NotNull(message = "Requirements is required")
-    @NotBlank(message = "Requirements is required")
-    @Size(min = 10, max = 70, message = "Requirements must be between 3 and 20 characters")
+
+    @NotNull(message = "Requirements are required")
+    @NotBlank(message = "Requirements are required")
+    @Size(min = 10, max = 70, message = "Requirements must be between 10 and 70 characters")
     private String requirements;
+
     @NotNull(message = "Category is required")
-    @NotBlank(message = "Category is required")
-    @Size(min = 2, max = 20, message = "Category must be between 3 and 20 characters")
     private JobCategory category;
+
     @NotNull(message = "Deadline is required")
-    @NotBlank(message = "Deadline is required")
-    @Size(min = 6, max = 20, message = "Deadline must be 6 characters")
     private LocalDateTime deadline;
-    @NotBlank(message = "Phone is required")
-    @NotNull(message = "Phone is required")
-    @Size(min = 9, max = 20, message = "Phone must be 9 characters or more")
-    private String phone;
-    @NotBlank(message = "Appliers is required")
-    @NotNull(message = "Appliers is required")
+
+    @NotNull(message = "Applicants count is required")
     private int applicants;
-
-
-
 }
