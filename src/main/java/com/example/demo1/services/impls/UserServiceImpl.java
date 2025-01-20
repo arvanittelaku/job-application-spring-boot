@@ -70,6 +70,9 @@ public class UserServiceImpl implements UserServices {
         existingUser.setPhone(userProfile.getPhone());
         existingUser.setEmail(userProfile.getEmail());
         existingUser.setBio(userProfile.getBio());
+        existingUser.setAddress(userProfile.getAddress());
+        existingUser.setCity(userProfile.getCity());
+        existingUser.setCountry(userProfile.getCountry());
 
         // Save and return the updated user
         return userRepository.save(existingUser);

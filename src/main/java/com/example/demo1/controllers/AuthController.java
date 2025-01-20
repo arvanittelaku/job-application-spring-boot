@@ -131,23 +131,7 @@ public class AuthController {
         }
     }
 
-//    @GetMapping("/profile/update")
-//    public String updateProfile(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-//        // Retrieve the user from the session
-//        UserProfile userProfile = (UserProfile) session.getAttribute("user");
-//
-//        // If the user is not in the session, redirect to login
-//        if (userProfile == null) {
-//            redirectAttributes.addFlashAttribute("error", "Please log in to update your profile.");
-//            return "redirect:/login";
-//        }
-//
-//        // Add the userProfile to the model for the form
-//        model.addAttribute("userProfile", userProfile);
-//
-//        // Return the profile update view
-//        return "profile_update";
-//    }
+
 
 //    @PostMapping("/profile/update")
 //    public String updateProfile(@Valid @ModelAttribute UserProfile userProfile,
