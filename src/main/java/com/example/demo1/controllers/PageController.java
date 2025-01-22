@@ -1,6 +1,7 @@
 package com.example.demo1.controllers;
 
 import com.example.demo1.dtos.user.UserProfile;
+import com.example.demo1.dtos.user.UserUpdateReqDto;
 import com.example.demo1.mappers.UserMapper;
 import com.example.demo1.models.User;
 import com.example.demo1.services.impls.UserServiceImpl;
@@ -48,12 +49,12 @@ public class PageController {
     @GetMapping("/profile/update")
     public String updateProfileForm(HttpSession session, Model model) {
         model.addAttribute("user", session.getAttribute("user"));
-        return "profile-update";
+        return "profile_update";
     }
 
     @PostMapping("/profile/update")
     public String updateProfile(
-            @Valid @ModelAttribute("userProfile") UserProfile userProfile,
+            @Valid @ModelAttribute("userProfile") UserUpdateReqDto userUpdateReqDto,
             BindingResult result,
             HttpSession session,
             Model model, RedirectAttributes redirectAttributes) {
@@ -64,24 +65,28 @@ public class PageController {
             return "profile_update";
         }
 
-        try {
-
-            UserProfile currentUser = (UserProfile) session.getAttribute("user");
-            if (currentUser == null) {
-                return "redirect:/login";
-            }
-
-            userProfile.setId(currentUser.getId());
-            User updatedUser = userServiceImpl.updateProfile(userProfile);
-            UserProfile updatedProfile = userMapper.toUserProfile(updatedUser); // Convert User to UserProfile
-            session.setAttribute("user", updatedProfile);
-
-            redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
-            return "redirect:/profile";
-
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "An error occurred while updating your profile.");
-            return "redirect:/profile/update";
+        //Save the current profile from the session and check if it exists
+        UserProfile currentProfile = (UserProfile) session.getAttribute("user");
+        if (currentProfile == null) {
+            return "redirect:/login";
         }
+        //check if the user with the current id of currentProfile exists
+        User user = userServiceImpl.findById(currentProfile.getId());
+        if (user == null) {
+            return "redirect:/login";
+        }
+        //update the user
+        userMapper.updateUserFromDto(userUpdateReqDto,user);
+        //save the user
+        userServiceImpl.add(user);
+
+        //map the updatedUser to the currentProfile
+        UserProfile updatedProfile = userMapper.toProfileDto(user);
+        session.setAttribute("user", updatedProfile);
+
+        redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
+        return "redirect:/profile";
+
+
     }
 }

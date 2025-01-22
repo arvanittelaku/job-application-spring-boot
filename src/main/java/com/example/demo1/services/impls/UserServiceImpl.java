@@ -132,4 +132,18 @@ public class UserServiceImpl implements UserServices {
         }
         userRepository.deleteById(user.getId());
     }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    }
+
+    public User findById(long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    }
+
+    public void add(User user) {
+        userRepository.save(user);
+    }
 }
