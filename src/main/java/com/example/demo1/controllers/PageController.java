@@ -57,36 +57,47 @@ public class PageController {
             @Valid @ModelAttribute("userProfile") UserUpdateReqDto userUpdateReqDto,
             BindingResult result,
             HttpSession session,
-            Model model, RedirectAttributes redirectAttributes) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
+        // Check for validation errors
         if (result.hasErrors()) {
             result.getAllErrors().forEach(error ->
                     System.out.println("Validation Error: " + error.getDefaultMessage()));
+            // Add errors back to the model for displaying in the view
+            model.addAttribute("errors", result.getAllErrors());
             return "profile_update";
         }
 
-        //Save the current profile from the session and check if it exists
+        // Retrieve the current profile from the session
         UserProfile currentProfile = (UserProfile) session.getAttribute("user");
         if (currentProfile == null) {
+            redirectAttributes.addFlashAttribute("error", "Session expired. Please log in again.");
             return "redirect:/login";
         }
-        //check if the user with the current id of currentProfile exists
+
+        // Check if the user exists in the database
         User user = userServiceImpl.findById(currentProfile.getId());
         if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "User not found. Please log in again.");
             return "redirect:/login";
         }
-        //update the user
-        userMapper.updateUserFromDto(userUpdateReqDto,user);
-        //save the user
+
+        // Update the user entity with the provided data
+        userMapper.updateUserFromDto(userUpdateReqDto, user);
+
+        // Save the updated user entity
         userServiceImpl.add(user);
 
-        //map the updatedUser to the currentProfile
+        // Convert the updated user entity back to a profile DTO
         UserProfile updatedProfile = userMapper.toProfileDto(user);
+
+        // Update the session with the latest profile
         session.setAttribute("user", updatedProfile);
 
+        // Add success message and redirect
         redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
         return "redirect:/profile";
-
-
     }
+
 }

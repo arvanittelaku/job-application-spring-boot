@@ -27,7 +27,7 @@ public interface UserMapper extends SimpleMapper<User,UserRegDto> {
 
     UserProfile toProfileDto(User user);
 
-    void updateUserFromDto(UserUpdateReqDto userUpdateReqDto, User user);
+    UserProfile updateUserFromDto(UserUpdateReqDto userUpdateReqDto, User user);
 
 
 
