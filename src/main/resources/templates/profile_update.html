@@ -14,7 +14,7 @@
         <div class="card mb-4">
           <div class="card-body">
             <h3 class="text-center mb-4">Update Profile</h3>
-            <form th:action="@{/profile/update}" th:object="${userProfile}" method="post">
+            <form th:action="@{/profile/update}" th:object="${session.user}" method="post">
               <div class="form-group mb-3">
                 <label for="name">Name</label>
                 <input type="text" id="name" th:field="*{name}" class="form-control" required>

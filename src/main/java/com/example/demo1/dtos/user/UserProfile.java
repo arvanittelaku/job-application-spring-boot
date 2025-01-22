@@ -49,4 +49,7 @@ public class UserProfile extends UserRegDto {
     @NotNull(message = "Role is required")
     @NotBlank(message = "Role is required")
     private UserRole role;
+
+    @NotNull(message = "Profile image cant be null!")
+    private String profileImage;
 }

@@ -48,6 +48,11 @@ public class PageController {
 
     @GetMapping("/profile/update")
     public String updateProfileForm(HttpSession session, Model model) {
+        // Ensure the user is logged in by checking the session
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+        // Add the user object from the session to the model
         model.addAttribute("user", session.getAttribute("user"));
         return "profile_update";
     }
@@ -69,34 +74,36 @@ public class PageController {
             return "profile_update";
         }
 
-        // Retrieve the current profile from the session
-        UserProfile currentProfile = (UserProfile) session.getAttribute("user");
-        if (currentProfile == null) {
-            redirectAttributes.addFlashAttribute("error", "Session expired. Please log in again.");
+        // Get the user object from the session
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("error", "User not found.");
             return "redirect:/login";
         }
 
-        // Check if the user exists in the database
-        User user = userServiceImpl.findById(currentProfile.getId());
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("error", "User not found. Please log in again.");
-            return "redirect:/login";
-        }
+        // Map the UserUpdateReqDto to a UserProfile object
 
-        // Update the user entity with the provided data
-        userMapper.updateUserFromDto(userUpdateReqDto, user);
+        UserProfile userProfile = userMapper.fromUpdateToProfile(userUpdateReqDto);
 
-        // Save the updated user entity
-        userServiceImpl.add(user);
+        // Update the user object with the form data
+        userProfile.setId(currentUser.getId());
+        userProfile.setPassword(currentUser.getPassword());
+        userProfile.setRole(currentUser.getRole());
+        userProfile.setAddress(currentUser.getAddress());
+        userProfile.setCity(currentUser.getCity());
+        userProfile.setCountry(currentUser.getCountry());
+        userProfile.setState(currentUser.getState());
+        userProfile.setPostalCode(currentUser.getPostalCode());
+        userProfile.setPhone(currentUser.getPhone());
+        userProfile.setEmail(currentUser.getEmail());
+        userProfile.setProfileImage(currentUser.getProfileImage());
 
-        // Convert the updated user entity back to a profile DTO
-        UserProfile updatedProfile = userMapper.toProfileDto(user);
+        // Update the user in the database
+        User updatedUser = userServiceImpl.updateProfile(userProfile);
 
-        // Update the session with the latest profile
-        session.setAttribute("user", updatedProfile);
+        // Update the user object in the session
+        session.setAttribute("user", updatedUser);
 
-        // Add success message and redirect
-        redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
         return "redirect:/profile";
     }
 

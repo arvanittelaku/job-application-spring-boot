@@ -25,12 +25,9 @@ public interface UserMapper extends SimpleMapper<User,UserRegDto> {
 
     UserUpdateReqDto toUpdateDto(User user);
 
-    UserProfile toProfileDto(User user);
+    User toUser(UserUpdateReqDto userUpdateReqDto);
 
-    UserProfile updateUserFromDto(UserUpdateReqDto userUpdateReqDto, User user);
-
-
-
+    UserProfile fromUpdateToProfile(UserUpdateReqDto userUpdateReqDto);
     UserProfile toUserProfile(User user);
 
     User toEntity(UserProfile userProfile);
