@@ -1,27 +1,31 @@
 package com.example.demo1.controllers;
 
 import com.example.demo1.dtos.user.UserProfile;
+import com.example.demo1.dtos.user.UserUpdateReqDto;
 import com.example.demo1.mappers.UserMapper;
 import com.example.demo1.models.User;
 import com.example.demo1.services.impls.UserServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@RequiredArgsConstructor
 @Controller
 public class PageController {
 
-    private UserServiceImpl userServiceImpl;
-    private UserMapper userMapper;
+    private final UserServiceImpl userServiceImpl;
+    private final UserMapper userMapper;
 
-    public PageController() {
-    }
+
 
     @GetMapping("/index")
     public String index() {
@@ -37,30 +41,38 @@ public class PageController {
     public String profile(HttpSession session, Model model) {
         // Ensure the user is logged in by checking the session
         if (session.getAttribute("user") == null) {
-            return "redirect:/login"; // Redirect to login if not authenticated
+            return "redirect:/login";
         }
 
-        // Add the user object from the session to the model
         model.addAttribute("user", session.getAttribute("user"));
-        return "profile"; // This should match the name of your HTML file: profile.html
+        return "profile";
     }
 
     @GetMapping("/profile/update")
-    public String updateProfileForm(HttpSession session, Model model) {
-        model.addAttribute("user", session.getAttribute("user"));
-        return "profile-update";
+    public String updateProfileForm(@SessionAttribute("user") UserProfile session, Model model) {
+
+        if (session == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("userProfile", session);
+        return "profile_update";
     }
+
+
 
     @PostMapping("/profile/update")
     public String updateProfile(
-            @Valid @ModelAttribute("userProfile") UserProfile userProfile,
+            @Valid @ModelAttribute("userUpdateReqDto") UserProfile userProfile,
             BindingResult result,
             HttpSession session,
-            Model model, RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
         if (result.hasErrors()) {
             result.getAllErrors().forEach(error ->
                     System.out.println("Validation Error: " + error.getDefaultMessage()));
+            model.addAttribute("userProfile", userProfile);
             return "profile_update";
         }
 
@@ -72,16 +84,25 @@ public class PageController {
             }
 
             userProfile.setId(currentUser.getId());
-            User updatedUser = userServiceImpl.updateProfile(userProfile);
-            UserProfile updatedProfile = userMapper.toUserProfile(updatedUser); // Convert User to UserProfile
-            session.setAttribute("user", updatedProfile);
+
+            UserProfile updatedUser = userServiceImpl.updateProfile(userProfile);
+            //write method to convert updatedUser to UserProfile
+            session.setAttribute("user", updatedUser);
 
             redirectAttributes.addFlashAttribute("success", "Profile updated successfully.");
             return "redirect:/profile";
 
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("error", "User not found.");
+            return "redirect:/profile/update";
         } catch (Exception e) {
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "An error occurred while updating your profile.");
             return "redirect:/profile/update";
         }
     }
+
+
+
+
 }

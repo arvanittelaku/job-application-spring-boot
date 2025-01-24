@@ -32,9 +32,6 @@ public class User {
     @Column(nullable = true, unique = true)
     private String email;
 
-    @Column(nullable = true)
-    private UserRole role;
-
     @Column(nullable = false)
     private String password;
 

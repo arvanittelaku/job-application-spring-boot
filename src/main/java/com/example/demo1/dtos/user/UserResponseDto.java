@@ -1,6 +1,5 @@
 package com.example.demo1.dtos.user;
 
-import com.example.demo1.models.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -55,9 +54,7 @@ public class UserResponseDto {
     private String bio;
 
     private String profileImage;
-    @NotNull(message = "Role is required")
-    @NotBlank(message = "Role is required")
-    private UserRole role;
+
 
 
 }

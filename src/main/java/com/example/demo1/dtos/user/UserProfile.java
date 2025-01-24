@@ -1,6 +1,5 @@
 package com.example.demo1.dtos.user;
 
-import com.example.demo1.models.UserRole;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,7 +14,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfile extends UserRegDto {
+public class UserProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,7 +45,10 @@ public class UserProfile extends UserRegDto {
     @Size(min = 5, max = 200, message = "Bio must be between 3 and 20 characters")
     private String bio;
 
-    @NotNull(message = "Role is required")
-    @NotBlank(message = "Role is required")
-    private UserRole role;
+    private String city;
+
+    private String country;
+
+    private String address;
+
 }

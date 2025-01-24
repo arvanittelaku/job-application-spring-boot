@@ -59,12 +59,11 @@ public class UserServiceImpl implements UserServices {
     }
 
     @Override
-    public User updateProfile(UserProfile userProfile) {
-        // Fetch the existing user from the database
+    public UserProfile updateProfile(UserProfile userProfile) {
+
         User existingUser = userRepository.findById(userProfile.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Update the user's fields
         existingUser.setName(userProfile.getName());
         existingUser.setLastName(userProfile.getLastName());
         existingUser.setPhone(userProfile.getPhone());
@@ -74,24 +73,24 @@ public class UserServiceImpl implements UserServices {
         existingUser.setCity(userProfile.getCity());
         existingUser.setCountry(userProfile.getCountry());
 
-        // Save and return the updated user
-        return userRepository.save(existingUser);
+        return userMapper.toProfileDto(userRepository.save(existingUser));
     }
 
 
-    @Override
-    public boolean changePassword(UserUpdateReqDto userUpdateReqDto) {
-        var exist = userRepository.findByUsername(userUpdateReqDto.getUsername());
-        if (exist.isEmpty()) {
-            throw new EntityNotFoundException("User not found");
-        }
 
-        var user = userMapper.toEntity(userUpdateReqDto);
-        user.setPassword(passwordEncoder.encode(userUpdateReqDto.getPassword()));
-        userRepository.save(user);
-
-        return true;
-    }
+//    @Override
+//    public boolean changePassword(UserUpdateReqDto userUpdateReqDto) {
+//        var exist = userRepository.findByUsername(userUpdateReqDto.getUsername());
+//        if (exist.isEmpty()) {
+//            throw new EntityNotFoundException("User not found");
+//        }
+//
+//        var user = userMapper.toEntity(userUpdateReqDto);
+//        user.setPassword(passwordEncoder.encode(userUpdateReqDto.getPassword()));
+//        userRepository.save(user);
+//
+//        return true;
+//    }
 
     @Override
     public User add(UserRegDto userRegDto) {
@@ -114,15 +113,15 @@ public class UserServiceImpl implements UserServices {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
-    @Override
-    public User modify(UserUpdateReqDto userUpdateReqDto) {
-        var exist = userRepository.findByUsername(userUpdateReqDto.getUsername());
-        if (exist.isEmpty()) {
-            throw new EntityNotFoundException("User not found");
-        }
-        var user = userMapper.toEntity(userUpdateReqDto);
-        return userRepository.save(user);
-    }
+//    @Override
+//    public User modify(UserUpdateReqDto userUpdateReqDto) {
+//        var exist = userRepository.findByUsername(userUpdateReqDto.getUsername());
+//        if (exist.isEmpty()) {
+//            throw new EntityNotFoundException("User not found");
+//        }
+//        var user = userMapper.toEntity(userUpdateReqDto);
+//        return userRepository.save(user);
+//    }
 
     @Override
     public void remove(UserListDto user) {
@@ -131,5 +130,10 @@ public class UserServiceImpl implements UserServices {
             throw new UserNotFoundException("User not found");
         }
         userRepository.deleteById(user.getId());
+    }
+
+    @Override
+    public User modify(UserUpdateReqDto updateReqDto) {
+        return null;
     }
 }

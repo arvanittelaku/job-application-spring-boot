@@ -9,8 +9,6 @@ import com.example.demo1.infrastructure.SimpleMapper;
 import com.example.demo1.models.User;
 import org.mapstruct.Mapper;
 
-import java.util.Optional;
-
 @Mapper(componentModel = "spring")
 public interface UserMapper extends SimpleMapper<User,UserRegDto> {
 
@@ -23,9 +21,11 @@ public interface UserMapper extends SimpleMapper<User,UserRegDto> {
 
     User toEntity(UserUpdateReqDto userUpdateReqDto);
 
-    UserUpdateReqDto toUpdateDto(User user);
+    UserUpdateReqDto toUpdateDto(UserProfile user);
 
     UserProfile toProfileDto(User user);
+
+    UserUpdateReqDto toUpdateReqDto(User user);
 
     UserProfile toUserProfile(User user);
 

@@ -14,7 +14,7 @@ public interface UserServices extends Findable<UserListDto, User>, Addable<UserR
 
     UserRegDto register(UserRegDto userRegDto);
 
-    User updateProfile(UserProfile userProfile);
+    UserProfile updateProfile(UserProfile userProfile);
 
-    boolean changePassword(UserUpdateReqDto userUpdateReqDto);
+//    boolean changePassword(UserUpdateReqDto userUpdateReqDto);
 }

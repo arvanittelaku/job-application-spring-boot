@@ -1,14 +1,7 @@
 package com.example.demo1.dtos.user;
 
-import com.example.demo1.annotations.PasswordMatches;
-import com.example.demo1.models.UserRole;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.springframework.context.annotation.Configuration;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @NoArgsConstructor
