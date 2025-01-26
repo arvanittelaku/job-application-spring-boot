@@ -24,7 +24,11 @@ public class Company {
     private String companyName;
 
     @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String address;
+
 
     @Column(nullable = false)
     private String email;
@@ -33,8 +37,8 @@ public class Company {
     private String phone;
 
 
-    @Column(nullable = false)
-    private JobCategory industries;
+    @Column()
+    private JobCategory industry;
 
     @Column(nullable = false)
     private String description;
@@ -43,17 +47,30 @@ public class Company {
     private String location;
 
     @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String state;
+
+    @Column(nullable = false)
+    private String country;
+
+
+
+    @Column(nullable = false)
     private LocalDate founded_year;
 
-    @Column(nullable = false)
-    @OneToMany(mappedBy = "jobOwner",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Job> jobs = new ArrayList<>();
+//    @Column(nullable = false)
+//    @OneToMany(mappedBy = "jobOwner",cascade = CascadeType.ALL,orphanRemoval = true)
+//    private List<Job> jobs = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column()
     private String website;
 
-    @Column(nullable = false)
-    private String logo;
+//    @Column()
+//    private String logo;
+
+
 
 
 

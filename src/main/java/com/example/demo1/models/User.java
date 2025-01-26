@@ -69,7 +69,7 @@ public class User {
     @Column(nullable = true)
     private String profileImage;
 
-    @Column(nullable = true)
-    @ManyToMany
-    private List<Job> jobsApplied;
+//    @Column(nullable = true)
+//    @ManyToMany
+//    private List<Job> jobsApplied;
 }

@@ -1,6 +1,6 @@
 package com.example.demo1.dtos.job;
 
-import com.example.demo1.dtos.company.CompanyDto;
+import com.example.demo1.dtos.company.CompanyProfile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobListDto extends CompanyDto {
+public class JobListDto extends CompanyProfile {
 
     @NotNull(message = "Title is required")
     @NotBlank(message = "Title is required")

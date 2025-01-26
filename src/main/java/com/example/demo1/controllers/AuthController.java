@@ -7,7 +7,8 @@ import com.example.demo1.exceptions.EmailExistException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.UsernameExistsException;
 import com.example.demo1.exceptions.WrongPasswordException;
-import com.example.demo1.mappers.UserMapperImpl;
+import com.example.demo1.mappers.UserMapper;
+
 import com.example.demo1.models.User;
 import com.example.demo1.services.impls.UserServiceImpl;
 import jakarta.servlet.http.Cookie;
@@ -29,7 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthController {
 
     private final UserServiceImpl userServiceImpl;
-    private final UserMapperImpl userMapper;
+    private final UserMapper userMapper;
 
 
     @GetMapping("/login")

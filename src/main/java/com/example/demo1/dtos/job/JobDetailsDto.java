@@ -1,6 +1,6 @@
 package com.example.demo1.dtos.job;
 
-import com.example.demo1.dtos.company.CompanyDto;
+import com.example.demo1.dtos.company.CompanyProfile;
 import com.example.demo1.models.JobCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,12 +8,13 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobDetailsDto extends CompanyDto {
+public class JobDetailsDto extends CompanyProfile {
     @NotNull(message = "Title is required")
     @NotBlank(message = "Title is required")
     @Size(min = 3, max = 20, message = "Title must be between 3 and 20 characters")

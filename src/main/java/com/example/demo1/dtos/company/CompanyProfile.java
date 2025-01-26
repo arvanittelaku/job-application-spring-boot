@@ -8,12 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyDto {
+public class CompanyProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -65,7 +66,10 @@ public class CompanyDto {
     @NotBlank(message = "Description is required")
     private String description;
 
-    @NotNull(message = "Logo is required")
-    @NotBlank(message = "Logo is required")
-    private String logo;
+
+
+
+    @NotNull(message = "Location is required")
+    @NotBlank(message = "Location is required")
+    private String location;
 }

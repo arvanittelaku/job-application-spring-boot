@@ -13,7 +13,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findAll();
     void removeJobByTitle(String title);
     Job findById(int id);
-    List<Job> findByJobOwner(String jobOwner);
+//    List<Job> findByJobOwner(String jobOwner);
     List<Job> findByTitle(String title);
     List<Job> findByLocation(String location);
     List<Job> findBySalary(double salary);
@@ -21,6 +21,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findByCategory(JobCategory category);
     List<Job> findByDeadline(LocalDateTime deadline);
     List<Job> findByCreatedAt(LocalDateTime createdAt);
-    List<Job> findByApplicants(int applicants);
+//    List<Job> findByApplicants(int applicants);
+    List<Job> findAllByTitleAndLocation(String location, String title);
 
 }

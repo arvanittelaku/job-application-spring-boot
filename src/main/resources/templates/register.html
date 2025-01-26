@@ -9,7 +9,7 @@
         <div class="col-md-6">
             <h2 class="text-center mb-4">Register</h2>
             <p class="text-end">
-                <a href="/register-company" class="text-decoration-none text-primary">Register as a company?</a>
+                <a th:href="@{/register-company}" class="text-decoration-none text-primary">Register as a company?</a>
             </p>
             <form th:action="@{/register}" th:object="${userRegDto}" method="post">
                 <!-- Username -->

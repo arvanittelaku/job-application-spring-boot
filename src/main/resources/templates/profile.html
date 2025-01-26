@@ -11,8 +11,18 @@
                 <div class="card-body text-center">
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
                          class="rounded-circle img-fluid" style="width: 150px;">
-                    <h5 class="my-3" th:text="${session.user.name}"></h5>
+                    <h5 class="my-3" th:text="${session.user.username}"></h5>
                     <p class="text-muted mb-4" th:text="${session.user.bio}"></p>
+
+                    <div class="header-btn d-flex justify-content-center mt-3">
+                        <a th:href="@{/profile/update}" class="btn btn-primary me-3 mr-5">Edit Profile</a>
+
+                        <form th:action="@{/logout}" method="post" th:unless="${session == null}" class="d-flex">
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    </div>
+
+
 
                 </div>
             </div>
@@ -88,12 +98,10 @@
                     <hr>
 
                     <div class="header-btn d-none f-right d-lg-block">
-                        <a th:href="@{/profile/update}" class="btn btn-primary mt-3">Edit Profile</a>
+                        <a th:href="@{/profile/update}" class="btn btn-primary mt-3 me-2">Edit Profile</a>
 
-                        <form th:action="@{/logout}" method="post"
-                              th:unless="${session == null}"
-                              class="btn head-btn1">
-                            <button type="submit">Logout</button>
+                        <form th:action="@{/logout}" method="post" th:unless="${session == null}" class="d-inline">
+                            <button type="submit" class="btn btn-danger mt-3">Logout</button>
                         </form>
                     </div>
                 </div>
@@ -102,5 +110,7 @@
         </div>
     </div>
 </section>
+
+
 </body>
 </html>

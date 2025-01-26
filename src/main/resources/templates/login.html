@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<th:block th:replace="shared/_header :: layout('Home')"></th:block>
+<th:block th:replace="shared/_header :: layout('Login')"></th:block>
 <div th:replace="shared/_navbar :: navbar"></div>
-<title></title>
+<title th:text="${title}"></title>
 <body>
 <div class="container">
     <div class="row justify-content-center align-items-center" style="min-height: 100vh;">

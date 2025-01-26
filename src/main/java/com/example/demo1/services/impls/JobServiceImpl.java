@@ -65,6 +65,13 @@ public class JobServiceImpl implements JobServices {
             throw new EntityNotFoundException("Job not found");
         }
         return exist.get();
+    }
 
+    public List<Job> findAllByTitleAndLocation(String title, String location) {
+        List<Job> jobs = jobRepository.findAllByTitleAndLocation(title, location);
+        if (jobs.isEmpty()) {
+            throw new EntityNotFoundException("Job not found");
+        }
+        return jobs;
     }
 }
