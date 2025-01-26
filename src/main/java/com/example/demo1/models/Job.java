@@ -20,8 +20,9 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(nullable = false)
-    private String jobOwner;
+    @ManyToOne
+    @JoinColumn(name = "companyName", referencedColumnName = "companyName", nullable = false)
+    private Company jobOwner;
 
     @Column(nullable = false)
     private String email;
@@ -50,8 +51,9 @@ public class Job {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column()
-    private int applicants;
+    @OneToMany(mappedBy = "job")
+    private List<User> applicants;
+
 
 
 }

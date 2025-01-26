@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class JobManagmentController {
     private final JobServiceImpl jobService;
 
-    @GetMapping("/jobs")
-    public String jobs(Model model) {
-        model.addAttribute("jobs", jobService.findAll());
-        return "crud/jobs-list";
-    }
+//    @GetMapping("/jobs")
+//    public String jobs(Model model) {
+//        model.addAttribute("jobs", jobService.findAll());
+//        return "jobs-list";
+//    }
 
     @GetMapping("/jobs/add")
     public String addJob(Model model) {

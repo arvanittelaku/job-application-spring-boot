@@ -4,6 +4,7 @@ import com.example.demo1.dtos.user.UserProfile;
 import com.example.demo1.dtos.user.UserUpdateReqDto;
 import com.example.demo1.mappers.UserMapper;
 import com.example.demo1.models.User;
+import com.example.demo1.services.impls.JobServiceImpl;
 import com.example.demo1.services.impls.UserServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PageController {
 
     private final UserServiceImpl userServiceImpl;
+    private final JobServiceImpl jobService;
     private final UserMapper userMapper;
 
 
@@ -100,6 +102,12 @@ public class PageController {
             redirectAttributes.addFlashAttribute("error", "An error occurred while updating your profile.");
             return "redirect:/profile/update";
         }
+    }
+
+    @GetMapping("/jobs")
+    public String jobs(Model model) {
+        model.addAttribute("jobs", jobService.findAll());
+        return "jobs-list";
     }
 
 
