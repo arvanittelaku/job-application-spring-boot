@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<th:block th:replace="shared/_header :: layout('Register')"></th:block>
+<th:block th:replace="~{shared/_header :: layout('Register')}"></th:block>
 <body>
-<div th:replace="shared/_navbar :: navbar"></div>
+<div th:replace="~{shared/_navbar :: navbar}"></div>
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h2 class="text-center mb-4">Register</h2>
             <p class="text-end">
-                <a th:href="@{/register/company}" class="text-decoration-none text-primary">Register as a company?</a>
+                <a th:href="@{/register}" class="text-decoration-none text-primary">Register as a user?</a>
             </p>
-            <form th:action="@{/register}" th:object="${userRegDto}" method="post">
+            <form th:action="@{/register}" th:object="${companyRegisterDto}" method="post">
                 <!-- Username -->
                 <div class="form-group mb-3">
-                    <label for="username">Username</label>
-                    <input type="text" th:field="*{username}" class="form-control" placeholder="Enter username" required>
-                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></span>
+                    <label for="companyName">Company Name</label>
+                    <input type="text" th:field="*{companyName}" class="form-control" placeholder="Enter username" required>
+                    <span th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}" class="text-danger"></span>
                 </div>
 
                 <!-- Password -->
@@ -35,43 +35,22 @@
 
                 <!-- Name -->
                 <div class="form-group mb-3">
-                    <label for="name">First Name</label>
-                    <input type="text" th:field="*{name}" class="form-control" placeholder="Enter your first name" required>
-                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+                    <label for="name">Company Email</label>
+                    <input type="text" th:field="*{email}" class="form-control" placeholder="Enter your first name" required>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
                 </div>
 
                 <!-- Last Name -->
                 <div class="form-group mb-3">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" th:field="*{lastName}" class="form-control" placeholder="Enter your last name" required>
-                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></span>
+                    <label for="lastName">Company Phone</label>
+                    <input type="text" th:field="*{phone}" class="form-control" placeholder="Enter your last name" required>
+                    <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></span>
                 </div>
 
                 <!-- Email -->
                 <div class="form-group mb-3">
-                    <label for="email">Email</label>
-                    <input type="email" th:field="*{email}" class="form-control" placeholder="Enter your email" required>
-                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
-                </div>
-
-                <!-- Phone -->
-                <div class="form-group mb-3">
-                    <label for="phone">Phone</label>
-                    <input type="text" th:field="*{phone}" class="form-control" placeholder="Enter your phone number" required>
-                    <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></span>
-                </div>
-
-                <!-- Address -->
-                <div class="form-group mb-3">
-                    <label for="address">Address</label>
-                    <input type="text" th:field="*{address}" class="form-control" placeholder="Enter your address" required>
-                    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-danger"></span>
-                </div>
-
-                <!-- Country -->
-                <div class="form-group mb-3">
-                    <label for="country">Country</label>
-                    <input type="text" th:field="*{country}" class="form-control" placeholder="Enter your country" required>
+                    <label for="email">Country</label>
+                    <input type="email" th:field="*{country}" class="form-control" placeholder="Enter your email" required>
                     <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" class="text-danger"></span>
                 </div>
 
@@ -80,6 +59,13 @@
                     <label for="city">City</label>
                     <input type="text" th:field="*{city}" class="form-control" placeholder="Enter your city" required>
                     <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="text-danger"></span>
+                </div>
+
+                <!-- Address -->
+                <div class="form-group mb-3">
+                    <label for="address">Address</label>
+                    <input type="text" th:field="*{address}" class="form-control" placeholder="Enter your address" required>
+                    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-danger"></span>
                 </div>
 
                 <!-- State -->

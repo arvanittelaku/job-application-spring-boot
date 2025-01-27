@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Company {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long company_id;
@@ -29,13 +30,11 @@ public class Company {
     @Column(nullable = false)
     private String address;
 
-
     @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String phone;
-
 
     @Column()
     private JobCategory industry;
@@ -54,8 +53,6 @@ public class Company {
 
     @Column(nullable = false)
     private String country;
-
-
 
     @Column(nullable = false)
     private LocalDate founded_year;
