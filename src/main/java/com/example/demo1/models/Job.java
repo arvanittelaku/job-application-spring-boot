@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,9 +21,10 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "companyName", referencedColumnName = "companyName", nullable = false)
-//    private Company jobOwner;
+    // Uncomment and modify as needed
+    // @ManyToOne
+    // @JoinColumn(name = "companyName", referencedColumnName = "companyName", nullable = false)
+    // private Company jobOwner;
 
     @Column(nullable = false)
     private String email;
@@ -40,19 +42,23 @@ public class Job {
     private double salary;
 
     @Column(nullable = false)
-    private String requirements;
+    private String requirements; // Qualifications, skills, etc.
 
+    @Column(nullable = false)
+    private String responsibilities; // Responsibilities or duties for the job
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private JobCategory category;
 
     @Column(nullable = false)
-    private LocalDateTime deadline;
+    private LocalDate deadline; // Application deadline
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; // When the job was posted
 
-//    @OneToMany(mappedBy = "job")
-//    private List<User> applicants;
+    @Column
+    private String contactInfo; // Contact information or apply link
 
 
 

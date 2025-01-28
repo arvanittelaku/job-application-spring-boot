@@ -2,12 +2,15 @@ package com.example.demo1.controllers;
 
 import com.example.demo1.dtos.company.CompanyLoginDto;
 import com.example.demo1.dtos.company.CompanyRegisterDto;
+import com.example.demo1.dtos.job.JobCreateDto;
 import com.example.demo1.exceptions.CompanyExistsException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.WrongPasswordException;
 import com.example.demo1.mappers.CompanyMapperImpl;
 import com.example.demo1.models.Company;
 import com.example.demo1.services.impls.CompanyServiceImpl;
+import com.example.demo1.services.impls.JobServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +33,7 @@ public class CompanyController {
     private final CompanyServiceImpl companyServiceImpl;
     private final View error;
     private final CompanyMapperImpl companyMapperImpl;
+    private final JobServiceImpl jobServiceImpl;
 
     @GetMapping("/register/company")
     public String companyRegister(Model model) {
@@ -39,7 +43,7 @@ public class CompanyController {
 
     @PostMapping("/register/company")
     public String registerCompany(
-            @Valid @ModelAttribute ("companyRegisterDto") CompanyRegisterDto companyRegisterDto,
+            @Valid @ModelAttribute("companyRegisterDto") CompanyRegisterDto companyRegisterDto,
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {
@@ -67,12 +71,12 @@ public class CompanyController {
 
     @PostMapping("/login/company")
     public String loginCompany(
-            @Valid @ModelAttribute ("companyLoginDto") CompanyLoginDto companyLoginDto,
+            @Valid @ModelAttribute("companyLoginDto") CompanyLoginDto companyLoginDto,
             BindingResult result,
             HttpServletRequest request,
             HttpServletResponse response,
             RedirectAttributes redirectAttributes
-    ){
+    ) {
         if (result.hasErrors()) {
             result.getAllErrors().forEach(error -> System.out.println("Validation Error: " + error.getDefaultMessage()));
             return "company_login";
@@ -101,4 +105,47 @@ public class CompanyController {
             return "redirect:/login/company";
         }
     }
+
+    @GetMapping("/jobs-add")
+    public String createJobForm(Model model) {
+        model.addAttribute("jobCreateDto", new JobCreateDto());
+        return "jobs-add";
+    }
+
+    @PostMapping("/jobs-add")
+    public String createJob(
+            @Valid @ModelAttribute("jobCreateDto") JobCreateDto jobCreateDto,
+            BindingResult result,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (result.hasErrors()) {
+            // No redirection for validation errors; show the same form with error messages
+            return "jobs-add";
+        }
+
+        Company company = (Company) request.getSession().getAttribute("company");
+        if (company == null) {
+            redirectAttributes.addFlashAttribute("error", "You need to be logged in as a company to post jobs.");
+            return "redirect:/login/company";
+        }
+
+        try {
+            jobServiceImpl.add(jobCreateDto);
+            redirectAttributes.addFlashAttribute("success", "Job created successfully.");
+            return "redirect:/jobs-list"; // Redirect to jobs list after success
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/jobs-add";
+        }
+    }
+
+
+
+    @GetMapping("/jobs-list")
+    public String getJobsList(Model model) {
+        model.addAttribute("jobs", jobServiceImpl.findAll());
+        return "jobs-list";
+    }
+
 }

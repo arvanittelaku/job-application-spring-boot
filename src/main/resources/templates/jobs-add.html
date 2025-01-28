@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="shared/_header :: layout('Jobs list')"></th:block>
+<body>
+<div th:replace="shared/_navbar :: navbar"></div>
+
+<h1 style="text-align: center;color: coral">Add Job</h1>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <form th:action="@{/jobs-add}" th:object="${jobCreateDto}" method="post">
+                <!-- Title -->
+                <div class="form-group mb-3">
+                    <label for="title">Job Title</label>
+                    <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Enter job title" required>
+                    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group mb-3">
+                    <label for="description">Job Description</label>
+                    <textarea id="description" th:field="*{description}" class="form-control" placeholder="Enter job description" rows="3" required></textarea>
+                    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger"></span>
+                </div>
+
+                <!-- Location -->
+                <div class="form-group mb-3">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" th:field="*{location}" class="form-control" placeholder="Enter location" required>
+                    <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="text-danger"></span>
+                </div>
+
+                <!-- Salary -->
+                <div class="form-group mb-3">
+                    <label for="salary">Salary</label>
+                    <input type="number" id="salary" th:field="*{salary}" class="form-control" placeholder="Enter salary" required>
+                    <span th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="text-danger"></span>
+                </div>
+
+                <!-- Category -->
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select th:field="*{category}" class="form-control" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="IT">IT</option>
+                        <option value="HEALTHCARE">Healthcare</option>
+                        <option value="EDUCATION">Education</option>
+                        <option value="FINANCE">Finance</option>
+                        <option value="MARKETING">Marketing</option>
+                        <option value="ENGINEERING">Engineering</option>
+                        <option value="PROGRAMMING">Programming</option>
+                        <option value="SALES">Sales</option>
+                        <option value="MEDICAL">Medical</option>
+                        <option value="LAW">Law</option>
+                        <option value="BUSINESS">Business</option>
+                        <option value="TEXTILE">Textile</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="text-danger"></span>
+                </div>
+
+                <!-- Deadline -->
+                <div class="form-group mb-3">
+                    <label for="deadline">Application Deadline</label>
+                    <input type="text" id="deadline" th:field="*{deadline}" class="form-control" required
+                           pattern="\d{4}-\d{2}-\d{2}" placeholder="yyyy-MM-dd">
+                    <span th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}" class="text-danger"></span>
+                </div>
+
+
+
+
+
+                <!-- Requirements -->
+                <div class="form-group mb-3">
+                    <label for="requirements">Requirements</label>
+                    <textarea id="requirements" th:field="*{requirements}" class="form-control" placeholder="Enter job requirements" rows="3" required></textarea>
+                    <span th:if="${#fields.hasErrors('requirements')}" th:errors="*{requirements}" class="text-danger"></span>
+                </div>
+
+                <!-- Responsibilities -->
+                <div class="form-group mb-3">
+                    <label for="responsibilities">Responsibilities</label>
+                    <textarea id="responsibilities" th:field="*{responsibilities}" class="form-control" placeholder="Enter job responsibilities" rows="3" required></textarea>
+                    <span th:if="${#fields.hasErrors('responsibilities')}" th:errors="*{responsibilities}" class="text-danger"></span>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="form-group mb-3">
+                    <label for="contactInfo">Contact Information</label>
+                    <input type="text" id="contactInfo" th:field="*{contactInfo}" class="form-control" placeholder="Enter contact information" required>
+                    <span th:if="${#fields.hasErrors('contactInfo')}" th:errors="*{contactInfo}" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100">Create Job</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

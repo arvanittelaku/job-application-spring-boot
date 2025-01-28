@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-    <th:block th:replace="shared/_header :: layout('Jobs list')"></th:block>
+<th:block th:replace="shared/_header :: layout('Jobs List')"></th:block>
 <body>
 <div th:replace="shared/_navbar :: navbar"></div>
-<h1 style="text-align: center;color: coral">Jobs List</h1>
 
-<div class="container">
+<h1 style="text-align: center; color: coral; margin-top: 20px;">Jobs List</h1>
+
+<div class="container mt-4">
     <div class="row">
         <div th:each="job : ${jobs}" th:object="${job}" class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="*{title}"></h5>
-                    <p class="card-text">Salary: <span th:text="*{salary}"></span></p>
-                    <p class="card-text">Location: <span th:text="*{location}"></span></p>
-<!--                    <p class="card-text">Contact: <span th:text="*{contact}"></span></p>-->
-<!--                    <p class="card-text">Deadline: <span th:text="*{deadline}"></span></p>-->
+                    <h5 class="card-title text-primary" th:text="*{title}"></h5>
+                    <p class="card-text"><strong>Salary:</strong> <span th:text="*{salary}"></span></p>
+                    <p class="card-text"><strong>Location:</strong> <span th:text="*{location}"></span></p>
+                    <p class="card-text"><strong>Category:</strong> <span th:text="*{category}"></span></p>
+                    <p class="card-text"><strong>Deadline:</strong>
+                        <span th:text="*{deadline}">Application Deadline</span>
+                    </p>
                 </div>
-
-               <button class="btn btn-outline-success">
-                   <a th:href="@{jobs/view/{id}(id=*{id})}" class="btn btn-primary">View</a>
-               </button>
-
+                <div class="card-footer text-center">
+                    <a th:href="@{/jobs/view/{id}(id=*{id})}" class="btn btn-primary">View Details</a>
+                </div>
             </div>
         </div>
     </div>

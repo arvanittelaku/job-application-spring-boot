@@ -18,6 +18,7 @@
                     </p>
 
                     <h2>Login to your account</h2>
+                    <a th:href="@{/login/company}" class="text-decoration-none text-primary">Log in as a company?</a>
                     <form action="/login" method="post" th:object="${loginRequestDto}">
                         <div class="form-group">
                             <label for="username">Username</label>

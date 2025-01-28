@@ -10,10 +10,8 @@ import com.example.demo1.services.baseService.*;
 import java.util.List;
 
 public interface JobServices extends Findable<JobSearchDto, Job>, Removable<JobDeleteDto>,
-        Addable<JobCreateDto,Job>, Modifiable<JobUpdateDto,Job>, FindAll<Job>
+        Addable<JobCreateDto,Job>, Modifiable<JobUpdateDto,Job>, FindAll<Job> {
 
-{
-
-
+//    public Job createJob(JobCreateDto jobCreateDto);
 
 }

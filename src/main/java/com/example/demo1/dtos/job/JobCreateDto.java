@@ -7,13 +7,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobCreateDto extends CompanyProfileDto {
+public class JobCreateDto {
 
     @NotNull(message = "Title is required")
     @NotBlank(message = "Title is required")
@@ -37,10 +38,27 @@ public class JobCreateDto extends CompanyProfileDto {
     private JobCategory category;
 
     @NotNull(message = "Deadline is required")
-    private LocalDateTime deadline;
+    private LocalDate deadline;
 
     @NotNull(message = "Requirements are required")
     @NotBlank(message = "Requirements are required")
     @Size(min = 8, max = 200, message = "Requirements must be between 8 and 200 characters")
     private String requirements;
+
+    @NotNull(message = "Responsibilities are required")
+    @NotBlank(message = "Responsibilities are required")
+    @Size(min = 10, max = 200, message = "Responsibilities must be between 10 and 200 characters")
+    private String responsibilities;
+
+    @NotNull(message = "Contact Information is required")
+    @NotBlank(message = "Contact Information is required")
+    @Size(min = 5, max = 100, message = "Contact Information must be between 5 and 100 characters")
+    private String contactInfo;
+
+    @NotNull(message = "Posted Date is required")
+    private LocalDateTime postedDate;
+
+    @NotNull(message = "Application Deadline is required")
+    private LocalDateTime applicationDeadline;
+
 }

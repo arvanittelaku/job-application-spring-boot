@@ -21,6 +21,10 @@
                                         <li><a th:href="@{/companies}">Companies</a></li>
                                         <li th:if="${session.user != null}"><a th:href="@{/profile}">Profile</a></li>
                                         <li th:if="${session.company != null}"><a th:href="@{/profile}">Company Profile</a></li>
+                                        <li th:if="${session.company != null}">
+                                            <a th:href="@{/jobs-add}" style="color: red; font-weight: bold;">Post Job</a>
+                                        </li>
+
 
                                     </ul>
                                 </nav>
