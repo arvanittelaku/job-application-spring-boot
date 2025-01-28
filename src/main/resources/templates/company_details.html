@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="~{shared/_header :: layout('Company Details')}"></th:block>
+<body>
+<div th:replace="~{shared/_navbar :: navbar}"></div>
+
+<section style="background-color: #f8f9fa; padding: 20px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- Company Card -->
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                             alt="Company Logo" class="rounded-circle img-fluid mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                        <h3 class="card-title mb-3" th:text="${company.companyName}">Company Name</h3>
+                        <p class="card-text text-muted mb-2" th:text="${company.industry}">Industry</p>
+                        <p class="card-text mb-4" th:text="${company.description}">Short Description</p>
+                    </div>
+                </div>
+
+                <!-- Additional Company Information -->
+                <div class="card" th:object="${company}">
+                    <div class="card-body">
+                        <h5 class="card-title">Company Details</h5>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Email:</strong></div>
+                            <div class="col-sm-8 text-muted" th:text="*{email}">example@company.com</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Phone:</strong></div>
+                            <div class="col-sm-8 text-muted" th:text="*{phone}">+123 456 789</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Address:</strong></div>
+                            <div class="col-sm-8 text-muted" th:text="*{address}">123 Company Street</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>City:</strong></div>
+                            <div class="col-sm-8 text-muted" th:text="*{city}">City Name</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Country:</strong></div>
+                            <div class="col-sm-8 text-muted" th:text="*{country}">Country Name</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Website:</strong></div>
+                            <div class="col-sm-8 text-muted">
+                                <a th:href="${company.website}" th:text="*{website}">Company Website</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

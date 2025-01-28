@@ -12,5 +12,6 @@ public enum JobCategory {
     MEDICAL,
     LAW,
     BUSINESS,
+    TEXTILE,
     OTHER;
 }

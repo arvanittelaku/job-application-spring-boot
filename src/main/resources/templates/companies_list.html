@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="~{shared/_header :: layout('Companies')}"></th:block>
+<body>
+<div th:replace="~{shared/_navbar :: navbar}"></div>
+
+<section style="background-color: #f8f9fa; padding: 20px 0;">
+    <div class="container">
+        <!-- Section Title -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-tittle text-center">
+                    <span>Featured Companies</span>
+                    <h2>Discover Top Employers</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Companies List -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 mb-4" th:each="company : ${companies}" th:object="${company}">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                     alt="Company Logo" class="rounded-circle img-fluid mb-3"
+                                     style="width: 100px; height: 100px; object-fit: cover;">
+                                <h5 class="card-title" th:text="*{companyName}">Company Name</h5>
+                                <p class="card-text text-muted" th:text="*{industry}">Industry</p>
+                                <p class="card-text" th:text="*{description}">Short description</p>
+                                <a th:href="@{/companies/{id}(id=*{id})}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

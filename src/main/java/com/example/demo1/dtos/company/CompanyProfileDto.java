@@ -1,5 +1,6 @@
 package com.example.demo1.dtos.company;
 
+import com.example.demo1.models.Role;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +19,8 @@ public class CompanyProfileDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private Role role = Role.COMPANY;
 
     @NotNull(message = "Company name is required")
     @NotBlank(message = "Company name is required")
@@ -61,8 +64,6 @@ public class CompanyProfileDto {
     )
     private String website;
 
-    @NotNull(message = "Description is required")
-    @NotBlank(message = "Description is required")
     private String description;
 
     @NotNull(message = "Location is required")

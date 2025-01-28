@@ -1,5 +1,6 @@
 package com.example.demo1.dtos.user;
 
+import com.example.demo1.models.Role;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +20,8 @@ public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private Role role = Role.USER;
 
     @NotNull(message = "Name is required")
     @NotBlank(message = "Name is required")

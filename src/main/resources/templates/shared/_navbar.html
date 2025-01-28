@@ -20,12 +20,13 @@
                                         <li><a th:href="@{/contact}">Contact</a></li>
                                         <li><a th:href="@{/companies}">Companies</a></li>
                                         <li th:if="${session.user != null}"><a th:href="@{/profile}">Profile</a></li>
+                                        <li th:if="${session.company != null}"><a th:href="@{/profile}">Company Profile</a></li>
 
                                     </ul>
                                 </nav>
                             </div>
                             <!-- Header-btn -->
-                            <div class="header-btn d-none f-right d-lg-block" th:if="${session.user == null}">
+                            <div class="header-btn d-none f-right d-lg-block" th:if="${session.user == null && session.company == null}">
                                 <a th:href="@{/register}" class="btn head-btn1">Register</a>
                                 <a th:href="@{/login}" class="btn head-btn2">Login</a>
                             </div>

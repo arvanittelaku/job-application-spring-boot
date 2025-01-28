@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserServices {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public User login(UserLoginDto userLoginDto) {
         // Fetch the User entity from the database
         User user = userRepository.findByUsername(userLoginDto.getUsername())

@@ -14,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RequiredArgsConstructor
@@ -112,15 +109,18 @@ public class PageController {
         return "jobs-list";
     }
 
-    @GetMapping("companies")
+    @GetMapping("/companies")
     public String companies(Model model) {
         model.addAttribute("companies", companyService.findAll());
-        return "companies";
+        return "companies_list";
     }
 
+    @GetMapping("/companies/{id}")
+    public String companyDetails(@PathVariable Long id, Model model) {
 
-
-
+        model.addAttribute("company", companyService.findById(id));
+        return "company_details";
+    }
 
 
 }

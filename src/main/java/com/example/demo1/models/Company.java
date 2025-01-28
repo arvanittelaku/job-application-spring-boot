@@ -19,7 +19,7 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long company_id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String companyName;
@@ -39,7 +39,6 @@ public class Company {
     @Column()
     private JobCategory industry;
 
-    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
@@ -54,7 +53,6 @@ public class Company {
     @Column(nullable = false)
     private String country;
 
-    @Column(nullable = false)
     private LocalDate founded_year;
 
 //    @Column(nullable = false)
