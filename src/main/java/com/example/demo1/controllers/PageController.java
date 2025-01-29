@@ -103,11 +103,11 @@ public class PageController {
         }
     }
 
-//    @GetMapping("/jobs")
-//    public String jobs(Model model) {
-//        model.addAttribute("jobs", jobService.findAll());
-//        return "jobs-list";
-//    }
+    @GetMapping("/jobs")
+    public String jobs(Model model) {
+        model.addAttribute("jobs", jobService.findAll());
+        return "jobs-list";
+    }
 
     @GetMapping("/companies")
     public String companies(Model model) {

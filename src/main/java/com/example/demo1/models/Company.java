@@ -36,9 +36,10 @@ public class Company {
     @Column(nullable = false)
     private String phone;
 
-    @Column()
+    @Column(nullable = false)
     private JobCategory industry;
 
+    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
@@ -55,9 +56,9 @@ public class Company {
 
     private LocalDate founded_year;
 
-//    @Column(nullable = false)
-//    @OneToMany(mappedBy = "jobOwner",cascade = CascadeType.ALL,orphanRemoval = true)
-//    private List<Job> jobs = new ArrayList<>();
+    @Column(nullable = false)
+    @OneToMany(mappedBy = "jobOwner",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Job> jobs = new ArrayList<>();
 
     @Column()
     private String website;

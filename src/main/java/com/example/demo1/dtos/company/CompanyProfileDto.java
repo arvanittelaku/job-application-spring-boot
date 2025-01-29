@@ -1,5 +1,6 @@
 package com.example.demo1.dtos.company;
 
+import com.example.demo1.models.Job;
 import com.example.demo1.models.Role;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,6 +23,9 @@ public class CompanyProfileDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+
+    private List<Job> jobs = new ArrayList<>();
 
     private Role role = Role.COMPANY;
 

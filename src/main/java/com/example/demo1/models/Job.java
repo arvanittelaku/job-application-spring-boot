@@ -22,9 +22,9 @@ public class Job {
     private int id;
 
     // Uncomment and modify as needed
-    // @ManyToOne
-    // @JoinColumn(name = "companyName", referencedColumnName = "companyName", nullable = false)
-    // private Company jobOwner;
+     @ManyToOne
+     @JoinColumn(name = "companyName", referencedColumnName = "companyName", nullable = false)
+     private Company jobOwner;
 
     @Column(nullable = false)
     private String email;
@@ -57,7 +57,7 @@ public class Job {
     @Column(nullable = false)
     private LocalDateTime createdAt; // When the job was posted
 
-    @Column
+    @Column(nullable = false)
     private String contactInfo; // Contact information or apply link
 
 
