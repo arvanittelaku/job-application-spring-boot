@@ -19,11 +19,16 @@
                                         <li><a th:href="@{/jobs}">Jobs</a></li>
                                         <li><a th:href="@{/contact}">Contact</a></li>
                                         <li><a th:href="@{/companies}">Companies</a></li>
-                                        <li th:if="${session.user != null}"><a th:href="@{/profile}">Profile</a></li>
-                                        <li th:if="${session.company != null}"><a th:href="@{/profile}">Company Profile</a></li>
+                                        <li th:if="${session.user != null}">
+                                            <a th:href="@{/profile/user}">Profile</a>
+                                        </li>
+                                        <li th:if="${session.company != null}">
+                                            <a th:href="@{/profile/company}">Company Profile</a>
+                                        </li>
                                         <li th:if="${session.company != null}">
                                             <a th:href="@{/jobs-add}" style="color: red; font-weight: bold;">Post Job</a>
                                         </li>
+
 
 
                                     </ul>

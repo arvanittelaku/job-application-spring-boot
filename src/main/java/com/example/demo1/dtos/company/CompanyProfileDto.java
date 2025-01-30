@@ -42,6 +42,8 @@ public class CompanyProfileDto {
     @Email
     private String email;
 
+    private String bio;
+
     @NotNull(message = "Phone is required")
     @NotBlank(message = "Phone is required")
     @Size(min = 9, max = 20, message = "Phone must be between 9 and 20 characters")

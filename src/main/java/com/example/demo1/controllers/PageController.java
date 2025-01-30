@@ -1,5 +1,6 @@
 package com.example.demo1.controllers;
 
+import com.example.demo1.dtos.company.CompanyProfileDto;
 import com.example.demo1.dtos.user.UserProfile;
 import com.example.demo1.dtos.user.UserUpdateReqDto;
 import com.example.demo1.helpers.FileHelper;
@@ -63,6 +64,16 @@ public class PageController {
         model.addAttribute("user", session.getAttribute("user"));
         return "profile";
     }
+
+    @GetMapping("/profile/company")
+    public String companyProfile(@SessionAttribute(name = "company", required = false) CompanyProfileDto company, Model model) {
+        if (company == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("company", company);
+        return "company-profile"; // Ensure this points to your company profile template
+    }
+
 
     @GetMapping("/profile/update")
     public String updateProfileForm(@SessionAttribute("user") UserProfile session, Model model) {

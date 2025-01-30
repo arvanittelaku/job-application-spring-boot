@@ -1,60 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-<th:block th:replace="~{shared/_header :: layout('Job Details')}"></th:block>
+<th:block th:replace="shared/_header :: layout('Job Details')"></th:block>
 <body>
-<div th:replace="~{shared/_navbar :: navbar}"></div>
+<div th:replace="shared/_navbar :: navbar"></div>
 
-<h1 style="text-align: center; color: coral; margin-bottom: 30px;">Job Details</h1>
-
-<div class="container">
-    <div th:object="${job}">
-        <div class="row mb-4">
-            <div class="col-lg-8 offset-lg-2">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h2 th:text="*{title}"></h2>
-                        <p><strong>Category:</strong> <span th:text="*{category}"></span></p>
-                    </div>
-                    <div class="card-body">
-                        <h5><strong>Company:</strong></h5>
-                        <p th:text="*{jobOwner.companyName}"></p>
-
-                        <h5><strong>Description:</strong></h5>
-                        <p th:text="*{description}"></p>
-
-                        <h5><strong>Location:</strong></h5>
-                        <p th:text="*{location}"></p>
-
-                        <h5><strong>Salary:</strong></h5>
-                        <p th:text="*{salary}"></p>
-
-                        <h5><strong>Requirements:</strong></h5>
-                        <p th:text="*{requirements}"></p>
-
-                        <h5><strong>Responsibilities:</strong></h5>
-                        <p th:text="*{responsibilities}"></p>
-
-                        <h5><strong>Application Deadline:</strong></h5>
-                        <p th:text="*{deadline}"></p>
-
-                        <h5><strong>Contact Info:</strong></h5>
-                        <p th:text="*{contactInfo}"></p>
-
-                        <h5><strong>Applicants: </strong></h5>
-                        <p th:text="*{applicants.size()}"></p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <form th:action="@{/jobs/view/{id}/apply(id=*{id})}" method="post">
-                            <button type="submit" class="btn btn-primary">Apply</button>
-                        </form>
+<main>
+    <!-- Hero Area Start -->
+    <div class="slider-area">
+        <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap text-center">
+                            <h2 th:text="${job.title}">Job Title</h2>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- Hero Area End -->
 
+    <!-- Job Details Start -->
+    <div class="job-post-company pt-120 pb-120" th:object="${job}">
+        <div class="container">
+            <div class="row justify-content-between">
+                <!-- Left Content -->
+                <div class="col-xl-7 col-lg-8">
+                    <div class="single-job-items mb-50">
+                        <div class="job-items">
+                            <div class="company-img company-img-details">
+                                <a href="#"><img src="assets/img/icon/job-list1.png" alt="Company Logo"></a>
+                            </div>
+                            <div class="job-tittle">
+                                <a href="#">
+                                    <h4 th:text="*{title}">Job Title</h4>
+                                </a>
+                                <ul>
+                                    <li th:text="*{jobOwner.companyName}">Company Name</li>
+                                    <li><i class="fas fa-map-marker-alt"></i> <span th:text="*{location}">Location</span></li>
+                                    <li><span th:text="*{salary}">Salary</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="job-post-details">
+                        <div class="post-details1 mb-50">
+                            <div class="small-section-tittle">
+                                <h4>Job Description</h4>
+                            </div>
+                            <p th:text="*{description}">Job description here.</p>
+                        </div>
+
+                        <div class="post-details2 mb-50">
+                            <div class="small-section-tittle">
+                                <h4>Requirements</h4>
+                            </div>
+                            <ul>
+                                <li th:each="requirement : *{requirements}">
+                                    <span th:text="${requirement}">Requirement</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="post-details2 mb-50">
+                            <div class="small-section-tittle">
+                                <h4>Responsibilities</h4>
+                            </div>
+                            <ul>
+                                <li th:each="responsibility : *{responsibilities}">
+                                    <span th:text="${responsibility}">Responsibility</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content -->
+                <div class="col-xl-4 col-lg-4">
+                    <div class="post-details3 mb-50">
+                        <div class="small-section-tittle">
+                            <h4>Job Overview</h4>
+                        </div>
+                        <ul>
+                            <li>Posted Date: <span th:text="*{createdAt}">Date</span></li>
+                            <li>Location: <span th:text="*{location}">Location</span></li>
+                            <li>Job Type: <span th:text="*{category}">Job Type</span></li>
+                            <li>Salary: <span th:text="*{salary}">Salary</span></li>
+                            <li>Application Deadline: <span th:text="*{deadline}">Deadline</span></li>
+                        </ul>
+                        <div class="apply-btn2">
+                            <form th:action="@{/jobs/view/{id}/apply(id=*{id})}" method="post">
+                                <button type="submit" class="btn">Apply Now</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="post-details4 mb-50">
+                        <div class="small-section-tittle">
+                            <h4>Company Information</h4>
+                        </div>
+                        <span th:text="*{jobOwner.companyName}">Company Name</span>
+                        <ul>
+                            <li>Name: <span th:text="*{jobOwner.companyName}">Company Name</span></li>
+                            <li>Website: <span th:text="*{jobOwner.website}">Website</span></li>
+                            <li>Email: <span th:text="*{jobOwner.email}">Email</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Job Details End -->
+</main>
 
 </body>
 </html>
