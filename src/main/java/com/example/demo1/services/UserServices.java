@@ -7,7 +7,9 @@ import com.example.demo1.services.baseService.Findable;
 import com.example.demo1.services.baseService.Modifiable;
 import com.example.demo1.services.baseService.Removable;
 
-public interface UserServices extends Findable<UserListDto, User>, Addable<UserRegDto, User>,
+import java.util.Optional;
+
+public interface UserServices extends Findable<Long, User>, Addable<UserRegDto, User>,
         Modifiable<UserUpdateReqDto, User>, Removable<UserListDto>
 {
     User login(UserLoginDto userLoginDto);
@@ -15,6 +17,12 @@ public interface UserServices extends Findable<UserListDto, User>, Addable<UserR
     UserRegDto register(UserRegDto userRegDto);
 
     UserProfile updateProfile(UserProfile userProfile);
+
+    Optional<User> find(Long id, User user);
+
+    User save(User user);
+
+    public void updateCv(User user, String fileName);
 
 //    boolean changePassword(UserUpdateReqDto userUpdateReqDto);
 }

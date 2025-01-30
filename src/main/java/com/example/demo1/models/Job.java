@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -56,6 +57,10 @@ public class Job {
 
     @Column(nullable = false)
     private String contactInfo; // Contact information or apply link
+
+    @Column
+    @ManyToMany(mappedBy = "jobsApplied", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<User> applicants = new ArrayList<>();
 
 
 

@@ -2,12 +2,15 @@ package com.example.demo1.dtos.job;
 
 import com.example.demo1.dtos.company.CompanyProfileDto;
 import com.example.demo1.models.JobCategory;
+import com.example.demo1.models.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Getter
@@ -45,5 +48,5 @@ public class JobDetailsDto extends CompanyProfileDto {
     private LocalDateTime deadline;
 
     @NotNull(message = "Applicants count is required")
-    private int applicants;
+    private List<User> applicants;
 }

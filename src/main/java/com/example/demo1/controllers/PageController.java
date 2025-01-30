@@ -2,6 +2,7 @@ package com.example.demo1.controllers;
 
 import com.example.demo1.dtos.user.UserProfile;
 import com.example.demo1.dtos.user.UserUpdateReqDto;
+import com.example.demo1.helpers.FileHelper;
 import com.example.demo1.mappers.UserMapper;
 import com.example.demo1.models.User;
 import com.example.demo1.services.impls.CompanyServiceImpl;
@@ -11,11 +12,23 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Controller
@@ -25,6 +38,7 @@ public class PageController {
     private final JobServiceImpl jobService;
     private final UserMapper userMapper;
     private final CompanyServiceImpl companyService;
+    private final FileHelper fileHelper;
 
 
 
@@ -102,6 +116,62 @@ public class PageController {
             return "redirect:/profile/update";
         }
     }
+
+    @PostMapping("/profile/upload-cv")
+    public String uploadCV(
+            @RequestParam("cv") MultipartFile file,
+            @SessionAttribute("user") UserProfile userProfile,
+            RedirectAttributes redirectAttributes) {
+
+        if (userProfile == null) {
+            redirectAttributes.addFlashAttribute("error", "You need to be logged in to upload a CV.");
+            return "redirect:/login";
+        }
+
+        try {
+            User user = userMapper.toEntity(userProfile);
+            String folder = "uploads/cvs";
+            String fileName = file.getOriginalFilename();
+            String newFileName = fileHelper.uploadFile(folder, fileName, file.getBytes());
+
+            if (newFileName != null) {
+                user.setCvFileName(newFileName);
+                userProfile.setCvFileName(newFileName);
+                userServiceImpl.save(user);
+                redirectAttributes.addFlashAttribute("success", "CV uploaded successfully.");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Failed to upload CV.");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An error occurred: " + e.getMessage());
+        }
+
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/profile/cv/{fileName}")
+    public ResponseEntity<Resource> getCV(@PathVariable String fileName) {
+        try {
+            Path filePath = Paths.get("uploads/cvs").resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists()) {
+                throw new FileNotFoundException("CV not found: " + fileName);
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
+
+
 
     @GetMapping("/jobs")
     public String jobs(Model model) {

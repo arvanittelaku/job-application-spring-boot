@@ -54,4 +54,6 @@ public class UserProfile {
 
     private String address;
 
+    private String cvFileName;
+
 }

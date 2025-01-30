@@ -39,9 +39,14 @@
 
                         <h5><strong>Contact Info:</strong></h5>
                         <p th:text="*{contactInfo}"></p>
+
+                        <h5><strong>Applicants: </strong></h5>
+                        <p th:text="*{applicants.size()}"></p>
                     </div>
                     <div class="card-footer text-center">
-                        <a th=""<button class="btn btn-primary">Apply</button>
+                        <a th:href="@{/jobs/view/{id}(id=*{id})/apply}">
+                           <button class="btn btn-primary">Apply</button>
+                        </a>
                     </div>
                 </div>
             </div>

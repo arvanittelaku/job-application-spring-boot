@@ -10,10 +10,11 @@ import com.example.demo1.models.User;
 import com.example.demo1.repositories.UserRepository;
 import com.example.demo1.services.UserServices;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -108,21 +109,28 @@ public class UserServiceImpl implements UserServices {
         return userRepository.save(user);
     }
 
+
+
     @Override
-    public User find(UserListDto user) {
-        return userRepository.findById(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    public Optional<User> find(Long id, User user) {
+        var exist = userRepository.findById(user.getId());
+        if (exist.isEmpty()) {
+            throw new UserNotFoundException("User not found");
+        }
+        return exist;
     }
 
-//    @Override
-//    public User modify(UserUpdateReqDto userUpdateReqDto) {
-//        var exist = userRepository.findByUsername(userUpdateReqDto.getUsername());
-//        if (exist.isEmpty()) {
-//            throw new EntityNotFoundException("User not found");
-//        }
-//        var user = userMapper.toEntity(userUpdateReqDto);
-//        return userRepository.save(user);
-//    }
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void updateCv(User user, String fileName) {
+        user.setCvFileName(fileName);
+        userRepository.save(user);
+    }
+
 
     @Override
     public void remove(UserListDto user) {
@@ -135,6 +143,11 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public User modify(UserUpdateReqDto updateReqDto) {
+        return null;
+    }
+
+    @Override
+    public User find(Long id) {
         return null;
     }
 }

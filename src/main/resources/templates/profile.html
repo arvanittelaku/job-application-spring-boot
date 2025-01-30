@@ -13,6 +13,24 @@
                          class="rounded-circle img-fluid" style="width: 150px;">
                     <h5 class="my-3" th:text="${session.user.username}"></h5>
                     <p class="text-muted mb-4" th:text="${session.user.bio}"></p>
+                    <div class="mt-3">
+                        <p>
+                            <strong>Your CV: </strong>
+                            <span th:if="${session.user.cvFileName != null}">
+            <a th:href="@{/profile/cv/{fileName}(fileName=${session.user.cvFileName})}"
+               class="text-primary" target="_blank" th:text="${session.user.cvFileName}">
+            </a>
+        </span>
+                            <span th:if="${session.user.cvFileName == null}">No CV uploaded</span>
+                        </p>
+
+                        <!-- Upload CV Form -->
+                        <form th:action="@{/profile/upload-cv}" method="post" enctype="multipart/form-data" class="d-inline">
+                            <input type="file" name="cv" id="cvFile" class="d-none" onchange="this.form.submit()" required>
+                            <button type="button" class="btn btn-primary" onclick="document.getElementById('cvFile').click()">Upload CV</button>
+                        </form>
+                    </div>
+
 
                 </div>
             </div>

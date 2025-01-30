@@ -70,6 +70,8 @@ public class User {
     @Column(nullable = true)
     private String profileImage;
 
+    @Column(nullable = true)
+    private String cvFileName;
 
 
     @ManyToMany
@@ -78,6 +80,6 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id")
     )
-    private List<Job> jobsApplied = new ArrayList<>();
+    private List<Job> jobsApplied = new ArrayList<>();;
 
 }
