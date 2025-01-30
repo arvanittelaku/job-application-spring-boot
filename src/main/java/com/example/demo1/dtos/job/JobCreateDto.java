@@ -38,7 +38,7 @@ public class JobCreateDto {
     private JobCategory category;
 
     @NotNull(message = "Deadline is required")
-    private LocalDate deadline;
+    private LocalDate deadline = LocalDate.now().plusDays(30);
 
     @NotNull(message = "Requirements are required")
     @NotBlank(message = "Requirements are required")
@@ -56,9 +56,7 @@ public class JobCreateDto {
     private String contactInfo;
 
     @NotNull(message = "Posted Date is required")
-    private LocalDateTime postedDate;
+    private LocalDateTime postedDate = LocalDateTime.now();
 
-    @NotNull(message = "Application Deadline is required")
-    private LocalDateTime applicationDeadline;
 
 }

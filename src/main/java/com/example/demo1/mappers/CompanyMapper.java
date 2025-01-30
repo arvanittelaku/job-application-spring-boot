@@ -22,6 +22,8 @@ public interface CompanyMapper {
     @Mapping(source = "industry", target = "industry")
     Company toEntity(CompanyRegisterDto companyRegisterDto);
 
+    Company fromProfileToEntity (CompanyProfileDto companyProfileDto);
+
     Company fromUpdateToEntity (CompanyUpdateDto companyUpdateDto);
 
     CompanyProfileDto toProfileDto(Company company);

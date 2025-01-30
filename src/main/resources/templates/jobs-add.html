@@ -60,18 +60,6 @@
                     <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="text-danger"></span>
                 </div>
 
-                <!-- Deadline -->
-                <div class="form-group mb-3">
-                    <label for="deadline">Application Deadline</label>
-                    <input type="text" id="deadline" th:field="*{deadline}" class="form-control" required
-                           pattern="\d{4}-\d{2}-\d{2}" placeholder="yyyy-MM-dd">
-                    <span th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}" class="text-danger"></span>
-                </div>
-
-
-
-
-
                 <!-- Requirements -->
                 <div class="form-group mb-3">
                     <label for="requirements">Requirements</label>

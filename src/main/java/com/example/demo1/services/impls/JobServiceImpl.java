@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class JobServiceImpl implements JobServices {
         var job = jobMapper.fromCreateToEntity(jobCreateDto);
 
         // Set creation timestamp
-        job.setCreatedAt(LocalDateTime.now());
+
 
         // Add additional validations or settings if necessary
         if (job.getTitle() == null || job.getDescription() == null) {
