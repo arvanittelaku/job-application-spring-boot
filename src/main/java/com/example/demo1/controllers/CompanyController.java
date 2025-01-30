@@ -1,6 +1,7 @@
 package com.example.demo1.controllers;
 
 import com.example.demo1.dtos.company.CompanyLoginDto;
+import com.example.demo1.dtos.company.CompanyProfileDto;
 import com.example.demo1.dtos.company.CompanyRegisterDto;
 import com.example.demo1.dtos.job.JobCreateDto;
 import com.example.demo1.exceptions.CompanyExistsException;
@@ -8,6 +9,7 @@ import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.WrongPasswordException;
 import com.example.demo1.mappers.CompanyMapperImpl;
 import com.example.demo1.models.Company;
+import com.example.demo1.models.Job;
 import com.example.demo1.services.impls.CompanyServiceImpl;
 import com.example.demo1.services.impls.JobServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,9 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -35,7 +35,7 @@ public class CompanyController {
 
     private final CompanyServiceImpl companyServiceImpl;
     private final View error;
-    private final CompanyMapperImpl companyMapperImpl;
+    private final CompanyMapperImpl companyMapper;
     private final JobServiceImpl jobServiceImpl;
 
     @GetMapping("/register/company")
@@ -100,7 +100,7 @@ public class CompanyController {
             // Create user session
 
             HttpSession session = request.getSession();
-            session.setAttribute("company", companyMapperImpl.toProfileDto(company));
+            session.setAttribute("company", companyMapper.toProfileDto(company));
 
             return "redirect:/index";
         } catch (UserNotFoundException | WrongPasswordException e) {
@@ -120,37 +120,50 @@ public class CompanyController {
             @Valid @ModelAttribute("jobCreateDto") JobCreateDto jobCreateDto,
             BindingResult result,
             HttpServletRequest request,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            @SessionAttribute(name = "company", required = false) CompanyProfileDto companyProfileDto
     ) {
 
-
+        // Handle validation errors
         if (result.hasErrors()) {
-            // No redirection for validation errors; show the same form with error messages
-            return "jobs-add";
+            return "jobs-add"; // Show the form again with errors
         }
 
-        Company company = (Company) request.getSession().getAttribute("company");
-        if (company == null) {
+        // Ensure the user is logged in as a company
+        if (companyProfileDto == null) {
             redirectAttributes.addFlashAttribute("error", "You need to be logged in as a company to post jobs.");
             return "redirect:/login/company";
         }
 
         try {
-            jobServiceImpl.add(jobCreateDto);
+            // Call the service to add the job (pass the correct company profile)
+            jobServiceImpl.add(jobCreateDto, companyProfileDto);
+
             redirectAttributes.addFlashAttribute("success", "Job created successfully.");
             return "redirect:/jobs-list"; // Redirect to jobs list after success
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/jobs-add";
+            return "redirect:/jobs-add"; // Redirect back to the job creation page on failure
         }
     }
-
 
 
     @GetMapping("/jobs-list")
     public String getJobsList(Model model) {
         model.addAttribute("jobs", jobServiceImpl.findAll());
         return "jobs-list";
+    }
+
+    @GetMapping("/jobs/view/{id}")
+    public String jobDetails(@PathVariable Long id, Model model) {
+
+        Job job = jobServiceImpl.findById(id);
+        if (job == null) {
+            throw new EntityNotFoundException("Job not found with ID: " + id);
+        }
+
+        model.addAttribute("job", job);
+        return "jobs-details";
     }
 
 }

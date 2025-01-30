@@ -1,19 +1,23 @@
 package com.example.demo1.services.impls;
 
+import com.example.demo1.dtos.company.CompanyProfileDto;
 import com.example.demo1.dtos.job.JobCreateDto;
 import com.example.demo1.dtos.job.JobDeleteDto;
 import com.example.demo1.dtos.job.JobSearchDto;
 import com.example.demo1.dtos.job.JobUpdateDto;
+import com.example.demo1.mappers.CompanyMapper;
 import com.example.demo1.mappers.JobMapper;
+import com.example.demo1.models.Company;
 import com.example.demo1.models.Job;
+import com.example.demo1.repositories.CompanyRepository;
 import com.example.demo1.repositories.JobRepository;
 import com.example.demo1.services.JobServices;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,26 +26,45 @@ public class JobServiceImpl implements JobServices {
 
     private final JobRepository jobRepository;
     private final JobMapper jobMapper;
+    private final CompanyMapper companyMapper;
+    private final CompanyRepository companyRepository;
 
+    @Transactional
     @Override
-    public Job add(JobCreateDto jobCreateDto) {
+    public void add(JobCreateDto jobCreateDto, CompanyProfileDto companyProfileDto) {
         var job = jobMapper.fromCreateToEntity(jobCreateDto);
 
-        // Set creation timestamp
-
-
-        // Add additional validations or settings if necessary
+        // Validate job fields
         if (job.getTitle() == null || job.getDescription() == null) {
             throw new IllegalArgumentException("Title and Description are required.");
         }
 
-        // Save to repository
-        try {
-            return jobRepository.save(job);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while saving the job: " + e.getMessage());
+        // Fetch the existing company from the database
+        Company company = companyRepository.findById(companyProfileDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Company not found in database."));
+
+        // Ensure the company's job list is initialized
+        if (company.getJobs() == null) {
+            company.setJobs(new ArrayList<>());
         }
+
+        // Add job to company's job list
+        company.getJobs().add(job);
+        job.setJobOwner(company);
+
+        // Save both the company and job
+        companyRepository.save(company);
     }
+
+
+    //        List<Job> jobs = new ArrayList<>();
+//        var job = jobMapper.fromCreateToEntity(jobCreateDto);
+//        jobs.add(job);
+//        companyProfileDto.setJobs(jobs);
+
+
+
+
 
 
     @Override

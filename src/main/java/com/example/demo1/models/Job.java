@@ -27,9 +27,6 @@ public class Job {
      private Company jobOwner;
 
     @Column(nullable = false)
-    private String email;
-
-    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -55,7 +52,7 @@ public class Job {
     private LocalDate deadline; // Application deadline
 
     @Column(nullable = false)
-    private LocalDateTime createdAt; // When the job was posted
+    private LocalDate createdAt = LocalDate.now(); // When the job was posted
 
     @Column(nullable = false)
     private String contactInfo; // Contact information or apply link

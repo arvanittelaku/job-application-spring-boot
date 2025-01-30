@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -69,7 +70,14 @@ public class User {
     @Column(nullable = true)
     private String profileImage;
 
-//    @Column(nullable = true)
-//    @ManyToMany
-//    private List<Job> jobsApplied;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_job_applications",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_id")
+    )
+    private List<Job> jobsApplied = new ArrayList<>();
+
 }
