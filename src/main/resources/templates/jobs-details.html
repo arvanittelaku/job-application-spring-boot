@@ -44,9 +44,9 @@
                         <p th:text="*{applicants.size()}"></p>
                     </div>
                     <div class="card-footer text-center">
-                        <a th:href="@{/jobs/view/{id}(id=*{id})/apply}">
-                           <button class="btn btn-primary">Apply</button>
-                        </a>
+                        <form th:action="@{/jobs/view/{id}/apply(id=*{id})}" method="post">
+                            <button type="submit" class="btn btn-primary">Apply</button>
+                        </form>
                     </div>
                 </div>
             </div>

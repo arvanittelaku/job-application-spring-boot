@@ -4,6 +4,7 @@ import com.example.demo1.dtos.user.UserProfile;
 import com.example.demo1.dtos.user.UserUpdateReqDto;
 import com.example.demo1.helpers.FileHelper;
 import com.example.demo1.mappers.UserMapper;
+import com.example.demo1.models.Job;
 import com.example.demo1.models.User;
 import com.example.demo1.services.impls.CompanyServiceImpl;
 import com.example.demo1.services.impls.JobServiceImpl;
@@ -166,6 +167,51 @@ public class PageController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping("/jobs/view/{id}/apply")
+    public String applyForJob(@PathVariable Long id,
+                              @SessionAttribute ("user") UserProfile user) {
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+
+        User existingUser = userServiceImpl.find(user.getId());
+        if (existingUser == null) {
+            return "redirect:/login";
+        }
+
+        Job existingJob = jobService.findById(id);
+        if (existingJob == null) {
+            throw new EntityNotFoundException("Job not found with ID: " + id);
+        }
+
+        // Add user to job's applicants list and job to user's jobsApplied list
+        existingJob.getApplicants().add(existingUser);
+        existingUser.getJobsApplied().add(existingJob);
+
+        // Save changes
+        jobService.saveJob(existingJob);
+        userServiceImpl.save(existingUser);
+
+        return "redirect:/jobs-list";
+    }
+
+    @PostMapping("/profile/{id}/cv/upload-cv")
+    public String uploadCV(@PathVariable Long id, @RequestParam("cv") MultipartFile file, RedirectAttributes redirectAttributes) {
+        try {
+            User user = userServiceImpl.find(id);
+            String folder = "uploads/cvs";
+            String fileName = file.getOriginalFilename();
+            String newFileName = fileHelper.uploadFile(folder, fileName, file.getBytes());
+            user.setCvFileName(newFileName);
+            userServiceImpl.save(user);
+            redirectAttributes.addFlashAttribute("success", "CV uploaded successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An error occurred: " + e.getMessage());
+        }
+        return "redirect:/profile";
     }
 
 

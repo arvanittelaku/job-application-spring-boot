@@ -10,6 +10,7 @@ import com.example.demo1.models.User;
 import com.example.demo1.repositories.UserRepository;
 import com.example.demo1.services.UserServices;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -125,6 +126,16 @@ public class UserServiceImpl implements UserServices {
         return userRepository.save(user);
     }
 
+
+    @Transactional
+    @Override
+    public void getCvFileName(Long userId, String cvFileName) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.setCvFileName(cvFileName); // Update only the CV filename
+        userRepository.save(user);
+    }
+
     @Override
     public void updateCv(User user, String fileName) {
         user.setCvFileName(fileName);
@@ -148,6 +159,7 @@ public class UserServiceImpl implements UserServices {
 
     @Override
     public User find(Long id) {
-        return null;
+        return userRepository.findById(id).orElse(null);
     }
+
 }

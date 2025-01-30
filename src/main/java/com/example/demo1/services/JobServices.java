@@ -14,6 +14,6 @@ public interface JobServices extends Findable<JobSearchDto, Job>, Removable<JobD
         , Modifiable<JobUpdateDto,Job>, FindAll<Job> {
     void add(JobCreateDto jobCreateDto, CompanyProfileDto companyProfileDto);
 
-//    public Job createJob(JobCreateDto jobCreateDto);
+    Job saveJob(Job job);
 
 }

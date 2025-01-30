@@ -56,16 +56,10 @@ public class JobServiceImpl implements JobServices {
         companyRepository.save(company);
     }
 
-
-    //        List<Job> jobs = new ArrayList<>();
-//        var job = jobMapper.fromCreateToEntity(jobCreateDto);
-//        jobs.add(job);
-//        companyProfileDto.setJobs(jobs);
-
-
-
-
-
+    @Override
+    public Job saveJob(Job job) {
+        return jobRepository.save(job);
+    }
 
     @Override
     public Job find(JobSearchDto jobSearchDto) {
