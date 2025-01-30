@@ -1,30 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
-<th:block th:replace="shared/_header :: layout('Jobs List')"></th:block>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="shared/_header :: layout('Jobs List')"></th:block>
+</head>
 <body>
+<!-- Navbar -->
 <div th:replace="shared/_navbar :: navbar"></div>
 
-<h1 style="text-align: center; color: coral; margin-top: 20px;">Jobs List</h1>
-
-<div class="container mt-4">
-    <div class="row">
-        <div th:each="job : ${jobs}" th:object="${job}" class="col-md-4">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title text-primary" th:text="*{title}"></h5>
-                    <p class="card-text"><strong>Salary:</strong> <span th:text="*{salary}"></span></p>
-                    <p class="card-text"><strong>Location:</strong> <span th:text="*{location}"></span></p>
-                    <p class="card-text"><strong>Category:</strong> <span th:text="*{category}"></span></p>
-                    <p class="card-text"><strong>Deadline:</strong>
-                        <span th:text="*{deadline}">Application Deadline</span>
-                    </p>
-                </div>
-                <div class="card-footer text-center">
-                    <a th:href="@{/jobs/view/{id}(id=*{id})}" class="btn btn-primary">View Details</a>
+<!-- Hero Section -->
+<div class="slider-area">
+    <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap text-center">
+                        <h2>Jobs List</h2>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Job Listings -->
+<div class="job-listing-area pt-120 pb-120">
+    <div class="container">
+        <div class="row">
+            <!-- Job Filters (Left Sidebar) -->
+            <div class="col-xl-3 col-lg-3 col-md-4">
+                <div class="job-filter mb-50">
+                    <h4>Filter Jobs</h4>
+                    <!-- Add filter options here if needed -->
+                </div>
+            </div>
+
+            <!-- Job Listings (Right Content) -->
+            <div class="col-xl-9 col-lg-9 col-md-8">
+                <section class="featured-job-area">
+                    <div class="container">
+                        <!-- Jobs Loop -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div th:each="job : ${jobs}" class="single-job-items mb-30">
+                                    <div class="job-items">
+                                        <div class="company-img">
+                                            <a th:href="@{/jobs/view/{id}(id=${job.id})}">
+                                                <img src="assets/img/icon/job-list1.png" alt="Company Logo">
+                                            </a>
+                                        </div>
+                                        <div class="job-tittle job-tittle2">
+                                            <a th:href="@{/jobs/view/{id}(id=${job.id})}">
+                                                <h4 th:text="${job.title}">Job Title</h4>
+                                            </a>
+                                            <ul>
+                                                <li th:text="${job.jobOwner.companyName}">Company Name</li>
+                                                <li><i class="fas fa-map-marker-alt"></i> <span th:text="${job.location}">Location</span></li>
+                                                <li th:text="'$' + ${job.salary}">Salary</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="items-link items-link2 f-right">
+                                        <a th:href="@{/jobs/view/{id}(id=${job.id})}" class="btn btn-primary btn-lg" style="padding: 10px 20px; border-radius: 5px; text-align: center;">View Details</a>
+                                        <span th:text="${job.deadline}" style="display: block; margin-top: 10px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
