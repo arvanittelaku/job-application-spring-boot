@@ -29,5 +29,7 @@ public interface JobMapper extends SimpleMapper<Job, JobDetailsDto> {
 
     JobDeleteDto fromEntityToDeleteDto(Job job);
 
+    JobUpdateDto toUpdateDto(Job job);
+
 
 }

@@ -89,6 +89,7 @@
                             <li>Job Type: <span th:text="*{category}">Job Type</span></li>
                             <li>Salary: <span th:text="*{salary}">Salary</span></li>
                             <li>Application Deadline: <span th:text="*{deadline}">Deadline</span></li>
+                            <li>Applicants: <span th:text="*{applicants.size()}"></span></li>
                         </ul>
                         <div class="apply-btn2">
                             <form th:action="@{/jobs/view/{id}/apply(id=*{id})}" method="post">

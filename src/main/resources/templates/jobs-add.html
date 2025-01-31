@@ -10,6 +10,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <form th:action="@{/jobs-add}" th:object="${jobCreateDto}" method="post">
+<!--                <input type="hidden" th:field="*{id}">-->
                 <!-- Title -->
                 <div class="form-group mb-3">
                     <label for="title">Job Title</label>

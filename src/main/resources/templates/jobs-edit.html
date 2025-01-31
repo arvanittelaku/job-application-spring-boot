@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="shared/_header :: layout('Edit Job')"></th:block>
+<body>
+<div th:replace="shared/_navbar :: navbar"></div>
+
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Edit Job</h1>
+
+    <form th:action="@{/jobs/edit/{id}(id=${jobUpdateDto.id})}" method="post" th:object="${jobUpdateDto}" class="mt-4">
+        <!-- Job Title -->
+        <div class="mb-3">
+            <label for="title" class="form-label">Job Title</label>
+            <input type="text" id="title" th:field="*{title}" class="form-control" required>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" th:field="*{description}" class="form-control" required></textarea>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" id="location" th:field="*{location}" class="form-control" required>
+        </div>
+
+        <!-- Salary -->
+        <div class="mb-3">
+            <label for="salary" class="form-label">Salary</label>
+            <input type="number" id="salary" th:field="*{salary}" class="form-control" required>
+        </div>
+
+        <!-- Requirements -->
+        <div class="mb-3">
+            <label for="requirements" class="form-label">Requirements</label>
+            <textarea id="requirements" th:field="*{requirements}" class="form-control" required></textarea>
+        </div>
+
+        <!-- Responsibilities -->
+        <div class="mb-3">
+            <label for="responsibilities" class="form-label">Responsibilities</label>
+            <textarea id="responsibilities" th:field="*{responsibilities}" class="form-control" required></textarea>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="mb-3">
+            <label for="category" class="form-label">Job Category</label>
+            <select id="category" th:field="*{category}" class="form-select" required>
+                <option th:each="cat : ${T(com.example.demo1.models.JobCategory).values()}"
+                        th:value="${cat}" th:text="${cat}"
+                        th:selected="${cat == jobUpdateDto.category}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="mb-3">
+            <label for="contactInfo" class="form-label">Contact Information</label>
+            <input type="text" id="contactInfo" th:field="*{contactInfo}" class="form-control" required>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Update Job</button>
+            <a th:href="@{/jobs}" class="btn btn-danger">Cancel</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -4,11 +4,13 @@ import com.example.demo1.dtos.company.CompanyLoginDto;
 import com.example.demo1.dtos.company.CompanyProfileDto;
 import com.example.demo1.dtos.company.CompanyRegisterDto;
 import com.example.demo1.dtos.job.JobCreateDto;
+import com.example.demo1.dtos.job.JobUpdateDto;
 import com.example.demo1.exceptions.CompanyExistsException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.WrongPasswordException;
 import com.example.demo1.helpers.impls.FileHelperImpl;
 import com.example.demo1.mappers.CompanyMapperImpl;
+import com.example.demo1.mappers.JobMapperImpl;
 import com.example.demo1.models.Company;
 import com.example.demo1.models.Job;
 import com.example.demo1.services.impls.CompanyServiceImpl;
@@ -41,6 +43,7 @@ public class CompanyController {
     private final CompanyMapperImpl companyMapper;
     private final JobServiceImpl jobServiceImpl;
     private final FileHelperImpl fileHelperImpl;
+    private final JobMapperImpl jobMapperImpl;
 
     @GetMapping("/register/company")
     public String companyRegister(Model model) {
@@ -206,6 +209,71 @@ public class CompanyController {
 
         model.addAttribute("jobs", jobs);
         return "company-dashboard";
+    }
+
+    @GetMapping("/jobs/{id}/applicants")
+    public String jobApplicants(@PathVariable Long id, Model model) {
+        Job job = jobServiceImpl.findById(id);
+        model.addAttribute("job", job);
+        model.addAttribute("applicants", job.getApplicants());
+        return "job-applicants";
+    }
+    @GetMapping("/jobs/{id}/edit")
+    public String editJob(@PathVariable Long id, Model model) {
+        Job job = jobServiceImpl.findById(id);
+        if (job == null) {
+            throw new EntityNotFoundException("Job not found with ID: " + id);
+        }
+        JobUpdateDto jobUpdateDto = jobMapperImpl.toUpdateDto(job);
+        model.addAttribute("jobUpdateDto", jobUpdateDto); // ✅ Correct model name
+        return "jobs-edit";
+    }
+
+    @PostMapping("/jobs/edit/{id}")
+    public String updateJob(@PathVariable Long id,
+                            @Valid @ModelAttribute("jobUpdateDto") JobUpdateDto jobUpdateDto,
+                            BindingResult result,
+                            Model model,  // Added model to pass jobUpdateDto if errors exist
+                            RedirectAttributes redirectAttributes) {
+
+        // Ensure the ID is correctly set in DTO
+        jobUpdateDto.setId(id);
+
+        // Handle validation errors
+        if (result.hasErrors()) {
+            model.addAttribute("jobUpdateDto", jobUpdateDto); // Re-add DTO to model
+            return "jobs-edit"; // Return to edit page with errors
+        }
+
+        try {
+            jobServiceImpl.modify(jobUpdateDto);
+            redirectAttributes.addFlashAttribute("success", "Job updated successfully.");
+            return "redirect:/jobs/view/" + id; // Redirect to updated job details page
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/dashboard"; // Redirect to dashboard if job not found
+        }
+    }
+
+    @PostMapping("/jobs/{id}/delete")
+    public String deleteJob(@PathVariable Long id,
+                            RedirectAttributes redirectAttributes,
+                            @SessionAttribute("company") CompanyProfileDto companyProfileDto) {
+        try {
+            // Remove the job using the service
+            jobServiceImpl.remove(id);
+
+            // Remove the job from the session company's job list
+            companyProfileDto.getJobs().removeIf(job -> job.getId().equals(id));
+
+            redirectAttributes.addFlashAttribute("success", "Job deleted successfully.");
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("error", "Job not found.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred while deleting the job.");
+        }
+
+        return "redirect:/dashboard"; // Redirect back to the dashboard
     }
 
 

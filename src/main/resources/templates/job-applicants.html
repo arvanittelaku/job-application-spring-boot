@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Include the header fragment -->
+<th:block th:replace="shared/_header :: layout('Job Applicants')"></th:block>
+
+<body>
+<!-- Include the navbar fragment -->
+<div th:replace="shared/_navbar :: navbar"></div>
+
+<section style="background-color: #eee; padding: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header text-center" th:object="${applicants}">
+                        <h3 th:text="${job.title} + ' - Applicants'">Job Title - Applicants</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="applicant : ${applicants}">
+                                <td th:text="${applicant.name}">Applicant Name</td>
+                                <td th:text="${applicant.email}">Applicant Email</td>
+                                <td th:text="${applicant.phone}">Applicant Phone</td>
+                                <td>
+                                    <a th:if="${applicant.cvFileName != null}"
+                                       th:href="@{/profile/cv/{fileName}(fileName=${applicant.cvFileName})}"
+                                       class="btn btn-primary btn-sm" target="_blank">
+                                        View CV
+                                    </a>
+                                    <span th:if="${applicant.cvFileName == null}">No CV uploaded</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(applicants)}">
+                                <td colspan="3" class="text-center">No applicants yet.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a th:href="@{/dashboard}" class="btn btn-primary">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

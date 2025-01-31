@@ -11,11 +11,12 @@ import com.example.demo1.services.baseService.*;
 
 import java.util.List;
 
-public interface JobServices extends Findable<JobSearchDto, Job>, Removable<JobDeleteDto>
+public interface JobServices extends Findable<JobSearchDto, Job>, Removable<Long>
         , Modifiable<JobUpdateDto,Job>, FindAll<Job> {
     void add(JobCreateDto jobCreateDto, CompanyProfileDto companyProfileDto);
 
     Job saveJob(Job job);
+
 
     List<Job> findByCompany(Company company);
 

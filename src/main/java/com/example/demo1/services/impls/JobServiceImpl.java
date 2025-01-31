@@ -70,24 +70,32 @@ public class JobServiceImpl implements JobServices {
     }
 
     @Override
+    @Transactional
     public Job modify(JobUpdateDto jobUpdateDto) {
-        var exist = jobRepository.findByTitle(jobUpdateDto.getTitle());
-        if (exist.isEmpty()) {
-            throw new EntityNotFoundException("Job not found");
-        }
-       var job = jobMapper.fromUpdateToEntity(jobUpdateDto);
-       return jobRepository.save(job);
+        Job existingJob = jobRepository.findById(jobUpdateDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Job not found"));
+
+        // Update only fields from DTO (excluding ID & non-editable fields)
+        existingJob.setTitle(jobUpdateDto.getTitle());
+        existingJob.setDescription(jobUpdateDto.getDescription());
+        existingJob.setLocation(jobUpdateDto.getLocation());
+        existingJob.setSalary(jobUpdateDto.getSalary());
+        existingJob.setRequirements(jobUpdateDto.getRequirements());
+        existingJob.setResponsibilities(jobUpdateDto.getResponsibilities());
+        existingJob.setCategory(jobUpdateDto.getCategory());
+        existingJob.setContactInfo(jobUpdateDto.getContactInfo());
+
+        return jobRepository.save(existingJob); // Persist changes
     }
 
     @Override
-    public void remove(JobDeleteDto id) {
-        var exist = jobRepository.findById(id.getId());
-        if (exist.isEmpty()) {
+    public void remove(Long id) {
+        if (!jobRepository.existsById(id)) {
             throw new EntityNotFoundException("Job not found");
         }
-        var job = jobMapper.fromDeleteToEntity(id);
-        jobRepository.removeJobByTitle(job.getTitle());
+        jobRepository.deleteById(id); // Use Spring Data JPA's built-in method
     }
+
 
     public List<Job> findAll() {
         return jobRepository.findAll();

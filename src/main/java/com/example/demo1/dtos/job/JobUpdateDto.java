@@ -2,6 +2,7 @@ package com.example.demo1.dtos.job;
 
 import com.example.demo1.dtos.company.CompanyProfileDto;
 import com.example.demo1.models.JobCategory;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobUpdateDto extends CompanyProfileDto {
+public class JobUpdateDto{
 
     @NotNull(message = "Title is required")
     @NotBlank(message = "Title is required")
@@ -37,9 +38,18 @@ public class JobUpdateDto extends CompanyProfileDto {
     @Size(min = 10, max = 200, message = "Requirements must be between 10 and 200 characters")
     private String requirements;
 
+    @NotNull(message = "Responsibilities are required")
+    @NotBlank(message = "Responsibilities are required")
+    @Size(min = 10, max = 200, message = "Responsibilities must be between 10 and 200 characters")
+    private String responsibilities;
+
     @NotNull(message = "Category is required")
     private JobCategory category;
 
-    @NotNull(message = "Deadline is required")
-    private LocalDateTime deadline;
+    @NotNull(message = "Contact information is required")
+    @NotBlank(message = "Contact information is required")
+    private String contactInfo;
+
+    @Id
+    private Long id;
 }

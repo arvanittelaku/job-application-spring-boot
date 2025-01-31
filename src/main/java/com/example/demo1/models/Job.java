@@ -19,8 +19,9 @@ import java.util.List;
 public class Job {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "job_seq")
+    @SequenceGenerator(name = "job_seq", sequenceName = "job_sequence", allocationSize = 1, initialValue = 1)
+    private Long id;
 
     // Uncomment and modify as needed
      @ManyToOne
