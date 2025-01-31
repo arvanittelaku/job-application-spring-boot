@@ -24,7 +24,7 @@ public class Job {
 
     // Uncomment and modify as needed
      @ManyToOne
-     @JoinColumn(name = "companyName", referencedColumnName = "companyName", nullable = false)
+     @JoinColumn(name = "company_id", referencedColumnName = "id", nullable = false)
      private Company jobOwner;
 
     @Column(nullable = false)

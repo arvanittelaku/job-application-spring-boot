@@ -32,6 +32,7 @@ public class JobServiceImpl implements JobServices {
     @Transactional
     @Override
     public void add(JobCreateDto jobCreateDto, CompanyProfileDto companyProfileDto) {
+        // Map DTO to Job entity
         var job = jobMapper.fromCreateToEntity(jobCreateDto);
 
         // Validate job fields
@@ -39,22 +40,18 @@ public class JobServiceImpl implements JobServices {
             throw new IllegalArgumentException("Title and Description are required.");
         }
 
-        // Fetch the existing company from the database
+        // Fetch the company from the database
         Company company = companyRepository.findById(companyProfileDto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Company not found in database."));
+                .orElseThrow(() -> new IllegalArgumentException("Company not found in the database."));
 
-        // Ensure the company's job list is initialized
-        if (company.getJobs() == null) {
-            company.setJobs(new ArrayList<>());
-        }
-
-        // Add job to company's job list
-        company.getJobs().add(job);
+        // Set the company (and consequently the company name) in the job entity
         job.setJobOwner(company);
 
-        // Save both the company and job
-        companyRepository.save(company);
+        // Save the job
+        jobRepository.save(job);
     }
+
+
 
     @Override
     public Job saveJob(Job job) {
@@ -111,4 +108,9 @@ public class JobServiceImpl implements JobServices {
         }
         return jobs;
     }
+
+    public List<Job> findByCompany(Company company) {
+        return jobRepository.findByJobOwner(company);
+    }
+
 }

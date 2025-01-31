@@ -7,6 +7,7 @@ import com.example.demo1.dtos.job.JobCreateDto;
 import com.example.demo1.exceptions.CompanyExistsException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.WrongPasswordException;
+import com.example.demo1.helpers.impls.FileHelperImpl;
 import com.example.demo1.mappers.CompanyMapperImpl;
 import com.example.demo1.models.Company;
 import com.example.demo1.models.Job;
@@ -23,11 +24,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class CompanyController {
     private final View error;
     private final CompanyMapperImpl companyMapper;
     private final JobServiceImpl jobServiceImpl;
+    private final FileHelperImpl fileHelperImpl;
 
     @GetMapping("/register/company")
     public String companyRegister(Model model) {
@@ -165,5 +169,48 @@ public class CompanyController {
         model.addAttribute("job", job);
         return "jobs-details";
     }
+
+    @PostMapping("/profile/{id}/upload-logo")
+    public String uploadLogo(@PathVariable Long id, @RequestParam("logo") MultipartFile file,
+                             RedirectAttributes redirectAttributes, HttpSession session) {
+        try {
+            Company company = companyServiceImpl.findById(id);
+            String folder = "uploads/logos";
+            String fileName = file.getOriginalFilename();
+            String newFileName = fileHelperImpl.uploadFile(folder, fileName, file.getBytes());
+            company.setLogoPath(newFileName);
+            companyServiceImpl.save(company);
+
+            // Update the session company
+            CompanyProfileDto companyProfileDto = companyMapper.toProfileDto(company);
+            session.setAttribute("company", companyProfileDto);
+
+            redirectAttributes.addFlashAttribute("success", "Logo uploaded successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An error occurred: " + e.getMessage());
+        }
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/dashboard")
+    public String companyDashboard(Model model, @SessionAttribute("company") CompanyProfileDto company) {
+        if (company == null) {
+            return "redirect:/login";
+        }
+
+        // Map CompanyProfile to Company entity
+        Company companyEntity = companyMapper.toEntity(company);
+
+        // Fetch jobs posted by this company
+        List<Job> jobs = jobServiceImpl.findByCompany(companyEntity);
+
+        model.addAttribute("jobs", jobs);
+        return "company-dashboard";
+    }
+
+
+
+
+
 
 }

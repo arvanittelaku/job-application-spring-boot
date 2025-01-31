@@ -25,10 +25,11 @@ public class FileHelperImpl implements FileHelper {
             Files.write(path, fileContent);
             return newName;
         } catch (IOException e) {
-            System.out.println("Error creating file: " + e.getMessage());
+            System.out.println("Error uploading file: " + e.getMessage());
             return null;
         }
     }
+
 
     @Override
     public void saveFile(String uploadDir, String fileName, byte[] fileData) throws IOException {

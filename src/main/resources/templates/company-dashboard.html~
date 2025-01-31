@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="shared/_header :: layout('Company Dashboard')"></th:block>
+<body>
+<div th:replace="shared/_navbar :: navbar"></div>
+
+<section class="container mt-4">
+    <h2 class="text-center">Company Dashboard</h2>
+    <hr>
+
+    <!-- Dashboard Navigation Tabs -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" id="posted-jobs-tab" data-bs-toggle="tab" href="#posted-jobs">Posted Jobs</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="applicants-tab" data-bs-toggle="tab" href="#applicants">Applicants</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/jobs-add}">Post New Job</a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- Posted Jobs Tab -->
+        <div class="tab-pane fade show active" id="posted-jobs">
+            <h4 class="mb-3">Manage Your Posted Jobs</h4>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                    <th>Deadline</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="job : ${jobs}">
+                    <td th:text="${job.title}"></td>
+                    <td th:text="${job.category}"></td>
+                    <td th:text="${job.location}"></td>
+                    <td th:text="${job.deadline}"></td>
+                    <td>
+                        <a th:href="@{/jobs/view/{id}(id=${job.id})}" class="btn btn-info btn-sm">View</a>
+                        <a th:href="@{/jobs/edit/{id}(id=${job.id})}" class="btn btn-warning btn-sm">Edit</a>
+                        <form th:action="@{/jobs/delete/{id}(id=${job.id})}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Applicants Tab -->
+        <div class="tab-pane fade" id="applicants">
+            <h4 class="mb-3">View Applicants for Your Jobs</h4>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Applicant Name</th>
+                    <th>Email</th>
+                    <th>CV</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="application : ${applications}">
+                    <td th:text="${application.job.title}"></td>
+                    <td th:text="${application.applicant.name}"></td>
+                    <td th:text="${application.applicant.email}"></td>
+                    <td>
+                        <a th:href="@{/profile/cv/{fileName}(fileName=${application.applicant.cvFileName})}" class="btn btn-link btn-sm">View CV</a>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm">Mark Reviewed</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

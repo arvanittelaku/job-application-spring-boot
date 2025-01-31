@@ -80,4 +80,6 @@ public class CompanyProfileDto {
     private String location;
 
     private String postalCode;
+
+    private String logoPath;
 }

@@ -56,15 +56,14 @@ public class Company {
 
     private LocalDate founded_year;
 
-    @Column(nullable = false)
-    @OneToMany(mappedBy = "jobOwner",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "jobOwner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobs = new ArrayList<>();
 
     @Column()
     private String website;
 
-//    @Column()
-//    private String logo;
+    @Column()
+    private String logoPath;
 
 
 

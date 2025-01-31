@@ -17,4 +17,6 @@ public interface CompanyServices {
     CompanyRegisterDto register (CompanyRegisterDto companyRegisterDto);
 
     Company login (CompanyLoginDto companyLoginDto);
+
+    Company save(Company company);
 }

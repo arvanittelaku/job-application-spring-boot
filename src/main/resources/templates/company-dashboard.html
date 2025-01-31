@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="shared/_header :: layout('Company Dashboard')"></th:block>
+<body>
+<div th:replace="shared/_navbar :: navbar"></div>
+
+<section class="container mt-5">
+    <h1 class="text-center">Company Dashboard</h1>
+    <div class="mt-4">
+        <h2>Posted Jobs</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Applicants</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="job : ${jobs}">
+                <td th:text="${job.title}"></td>
+                <td th:text="${job.location}"></td>
+                <td><a th:href="@{/jobs/{id}/applicants(id=${job.id})}">View Applicants</a></td>
+                <td>
+                    <a th:href="@{/jobs/{id}/edit(id=${job.id})}" class="btn btn-primary btn-sm">Edit</a>
+                    <form th:action="@{/jobs/{id}/delete(id=${job.id})}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</body>
+</html>

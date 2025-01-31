@@ -1,5 +1,6 @@
 package com.example.demo1.repositories;
 
+import com.example.demo1.models.Company;
 import com.example.demo1.models.Job;
 import com.example.demo1.models.JobCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,7 +22,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findByCategory(JobCategory category);
     List<Job> findByDeadline(LocalDateTime deadline);
     List<Job> findByCreatedAt(LocalDateTime createdAt);
-//    List<Job> findByApplicants(int applicants);
+    List<Job> findByJobOwner(Company jobOwner);
     List<Job> findAllByTitleAndLocation(String location, String title);
 
 }

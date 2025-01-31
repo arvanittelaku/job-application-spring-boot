@@ -54,6 +54,11 @@ public class CompanyServiceImpl implements CompanyServices {
     }
 
     @Override
+    public Company save(Company company) {
+        return companyRepository.save(company);
+    }
+
+    @Override
     public Company findById(Long id) {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new CompanyExistsException("Company not found!"));
