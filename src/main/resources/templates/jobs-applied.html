@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="shared/_header :: layout('Jobs list')"></th:block>
+<body>
+<div th:replace="shared/_navbar :: navbar"></div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div th:if="${jobs.isEmpty()}">
+                <p>No jobs found.</p>
+            </div>
+            <div th:each="job : ${jobs}">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${job.title}"></h5>
+                        <p class="card-text" th:text="${job.description}"></p>
+                        <p class="card-text" th:text="${job.location}"></p>
+                        <p class="card-text" th:text="${job.jobOwner}"></p>
+                        <p class="card-text" th:text="${job.status}"></p>
+                        <a th:href="@{/job/cancel-application/{id}(id=${job.id})}" class="btn btn-danger">Cancel Application</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

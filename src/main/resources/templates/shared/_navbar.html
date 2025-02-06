@@ -20,7 +20,7 @@
                                         <li><a th:href="@{/contact}">Contact</a></li>
                                         <li><a th:href="@{/companies}">Companies</a></li>
                                         <li th:if="${session.user != null}">
-                                            <a th:href="@{/profile/user}">Profile</a>
+                                            <a th:href="@{/profile}">Profile</a>
                                         </li>
                                         <li th:if="${session.company != null}">
                                             <a th:href="@{/profile/company}">Company Profile</a>

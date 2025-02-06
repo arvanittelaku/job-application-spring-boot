@@ -63,6 +63,7 @@ public class Job {
     @ManyToMany(mappedBy = "jobsApplied", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<User> applicants = new ArrayList<>();
 
-
+    @Column(nullable = true)
+    private ApplicationStatus status;
 
 }

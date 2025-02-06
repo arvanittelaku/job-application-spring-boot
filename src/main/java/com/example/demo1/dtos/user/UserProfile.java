@@ -1,5 +1,6 @@
 package com.example.demo1.dtos.user;
 
+import com.example.demo1.models.Job;
 import com.example.demo1.models.Role;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +10,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Getter
@@ -55,5 +59,7 @@ public class UserProfile {
     private String address;
 
     private String cvFileName;
+
+    private List<Job> jobsApplied = new ArrayList<>();
 
 }

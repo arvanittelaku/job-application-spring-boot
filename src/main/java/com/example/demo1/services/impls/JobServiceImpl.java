@@ -7,6 +7,7 @@ import com.example.demo1.dtos.job.JobSearchDto;
 import com.example.demo1.dtos.job.JobUpdateDto;
 import com.example.demo1.mappers.CompanyMapper;
 import com.example.demo1.mappers.JobMapper;
+import com.example.demo1.models.ApplicationStatus;
 import com.example.demo1.models.Company;
 import com.example.demo1.models.Job;
 import com.example.demo1.repositories.CompanyRepository;
@@ -119,6 +120,14 @@ public class JobServiceImpl implements JobServices {
 
     public List<Job> findByCompany(Company company) {
         return jobRepository.findByJobOwner(company);
+    }
+
+    public void updateJobStatus(Long jobId, ApplicationStatus newStatus) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+
+        job.setStatus(newStatus);
+        jobRepository.save(job);
     }
 
 }

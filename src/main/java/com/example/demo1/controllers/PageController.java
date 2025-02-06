@@ -249,5 +249,26 @@ public class PageController {
         return "company_details";
     }
 
+    @GetMapping("/jobs-applied")
+    public String jobsApplied(@SessionAttribute("user") UserProfile user, Model model) {
+        model.addAttribute("jobs",user.getJobsApplied());
+        return "jobs-applied";
+    }
+
+    @PostMapping("/job/cancel-application/{id}")
+    public String cancelApplication(@PathVariable Long id, @SessionAttribute("user") UserProfile user) {
+        Job job = jobService.findById(id);
+        if (job == null) {
+            throw new EntityNotFoundException("Job not found with ID: " + id);
+        }
+
+        //map userProfile to user entity
+        User userEntity = userMapper.toEntity(user);
+        // Remove user from job's applicants list and job from user's jobsApplied list
+        userEntity.getJobsApplied().remove(job);
+        job.getApplicants().remove(userEntity);
+        return "redirect:/jobs-applied";
+    }
+
 
 }

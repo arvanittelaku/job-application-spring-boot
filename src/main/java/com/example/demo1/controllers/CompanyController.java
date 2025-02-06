@@ -9,8 +9,9 @@ import com.example.demo1.exceptions.CompanyExistsException;
 import com.example.demo1.exceptions.UserNotFoundException;
 import com.example.demo1.exceptions.WrongPasswordException;
 import com.example.demo1.helpers.impls.FileHelperImpl;
-import com.example.demo1.mappers.CompanyMapperImpl;
-import com.example.demo1.mappers.JobMapperImpl;
+import com.example.demo1.mappers.CompanyMapper;
+import com.example.demo1.mappers.JobMapper;
+import com.example.demo1.models.ApplicationStatus;
 import com.example.demo1.models.Company;
 import com.example.demo1.models.Job;
 import com.example.demo1.services.impls.CompanyServiceImpl;
@@ -40,10 +41,10 @@ public class CompanyController {
 
     private final CompanyServiceImpl companyServiceImpl;
     private final View error;
-    private final CompanyMapperImpl companyMapper;
+    private final CompanyMapper companyMapper;
     private final JobServiceImpl jobServiceImpl;
     private final FileHelperImpl fileHelperImpl;
-    private final JobMapperImpl jobMapperImpl;
+    private final JobMapper jobMapperImpl;
 
     @GetMapping("/register/company")
     public String companyRegister(Model model) {
@@ -275,6 +276,23 @@ public class CompanyController {
 
         return "redirect:/dashboard"; // Redirect back to the dashboard
     }
+
+
+    @PostMapping("/save/status/{id}")
+    public String updateApplicationStatus(@PathVariable Long id,
+                                          @RequestParam ApplicationStatus status,
+                                          RedirectAttributes redirectAttributes) {
+        try {
+            jobServiceImpl.updateJobStatus(id, status);
+            redirectAttributes.addFlashAttribute("successMessage", "Application status updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to update status: " + e.getMessage());
+        }
+        return "redirect:/job/list";  // Redirect to the job listing or another relevant page
+    }
+
+
+
 
 
 
