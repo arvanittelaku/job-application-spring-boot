@@ -7,6 +7,7 @@ import com.example.demo1.helpers.FileHelper;
 import com.example.demo1.mappers.UserMapper;
 import com.example.demo1.models.Job;
 import com.example.demo1.models.User;
+import com.example.demo1.repositories.UserRepository;
 import com.example.demo1.services.impls.CompanyServiceImpl;
 import com.example.demo1.services.impls.JobServiceImpl;
 import com.example.demo1.services.impls.UserServiceImpl;
@@ -20,6 +21,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -41,6 +45,7 @@ public class PageController {
     private final UserMapper userMapper;
     private final CompanyServiceImpl companyService;
     private final FileHelper fileHelper;
+    private final UserRepository userRepository;
 
 
 
@@ -250,10 +255,18 @@ public class PageController {
     }
 
     @GetMapping("/jobs-applied")
-    public String jobsApplied(@SessionAttribute("user") UserProfile user, Model model) {
-        model.addAttribute("jobs",user.getJobsApplied());
+    public String jobsApplied(@SessionAttribute("user") UserProfile userProfile, Model model) {
+        if (userProfile == null) {
+            return "redirect:/login";
+        }
+
+        List<Job> jobsApplied = userProfile.getJobsApplied();
+        model.addAttribute("jobs", jobsApplied);
+
         return "jobs-applied";
     }
+
+
 
     @PostMapping("/job/cancel-application/{id}")
     public String cancelApplication(@PathVariable Long id, @SessionAttribute("user") UserProfile user) {

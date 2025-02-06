@@ -73,6 +73,11 @@ public class User {
     @Column(nullable = true)
     private String cvFileName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ApplicationStatus applicationStatus = ApplicationStatus.PENDING;
+
+
 
     @ManyToMany
     @JoinTable(

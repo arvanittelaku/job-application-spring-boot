@@ -17,6 +17,7 @@ public interface JobServices extends Findable<JobSearchDto, Job>, Removable<Long
 
     Job saveJob(Job job);
 
+    void updateApplicationStatus(Long jobId, Long applicantId, String status);
 
     List<Job> findByCompany(Company company);
 

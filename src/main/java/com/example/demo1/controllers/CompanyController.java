@@ -278,18 +278,23 @@ public class CompanyController {
     }
 
 
-    @PostMapping("/save/status/{id}")
-    public String updateApplicationStatus(@PathVariable Long id,
-                                          @RequestParam ApplicationStatus status,
-                                          RedirectAttributes redirectAttributes) {
+    @PostMapping("/jobs/update-status")
+    public String updateApplicationStatus(
+            @RequestParam Long jobId,
+            @RequestParam Long applicantId,
+            @RequestParam String status,
+            RedirectAttributes redirectAttributes) {
+
         try {
-            jobServiceImpl.updateJobStatus(id, status);
-            redirectAttributes.addFlashAttribute("successMessage", "Application status updated successfully!");
+            jobServiceImpl.updateApplicationStatus(jobId, applicantId, status);
+            redirectAttributes.addFlashAttribute("success", "Application status updated successfully.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to update status: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Failed to update application status.");
         }
-        return "redirect:/job/list";  // Redirect to the job listing or another relevant page
+
+        return "redirect:/jobs/view/" + jobId;
     }
+
 
 
 

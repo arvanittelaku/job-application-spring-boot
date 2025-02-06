@@ -10,12 +10,15 @@ import com.example.demo1.mappers.JobMapper;
 import com.example.demo1.models.ApplicationStatus;
 import com.example.demo1.models.Company;
 import com.example.demo1.models.Job;
+import com.example.demo1.models.User;
 import com.example.demo1.repositories.CompanyRepository;
 import com.example.demo1.repositories.JobRepository;
+import com.example.demo1.repositories.UserRepository;
 import com.example.demo1.services.JobServices;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.realm.UserDatabaseRealm;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ public class JobServiceImpl implements JobServices {
     private final JobMapper jobMapper;
     private final CompanyMapper companyMapper;
     private final CompanyRepository companyRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     @Override
@@ -126,8 +130,38 @@ public class JobServiceImpl implements JobServices {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        job.setStatus(newStatus);
+        job.setApplicationStatus(newStatus);
         jobRepository.save(job);
     }
+
+    @Transactional
+    public void updateApplicationStatus(Long jobId, Long applicantId, String status) {
+        // Fetch job and applicant from the database
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new EntityNotFoundException("Job not found"));
+
+        User applicant = userRepository.findById(applicantId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // Ensure the applicant has applied for this job
+        if (!job.getApplicants().contains(applicant)) {
+            throw new IllegalArgumentException("User has not applied for this job");
+        }
+
+        try {
+            // Convert status to uppercase before assigning
+            ApplicationStatus newStatus = ApplicationStatus.valueOf(status.toUpperCase());
+
+            // Update the status in the Job entity
+            job.setApplicationStatus(newStatus);
+            jobRepository.save(job);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid status value: " + status);
+        }
+    }
+
+
+
+
 
 }

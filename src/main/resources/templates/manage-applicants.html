@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="shared/_header :: layout('Manage Applicants')"></th:block>
+<body>
+<div th:replace="shared/_navbar :: navbar"></div>
+
+<div class="container mt-5">
+  <h1 class="text-center text-primary">Manage Applicants for [[${job.title}]]</h1>
+
+  <div class="mt-4">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>Applicant Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Current Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="applicant : ${applicants}">
+        <td th:text="${applicant.name}">Applicant Name</td>
+        <td th:text="${applicant.email}">Email</td>
+        <td th:text="${applicant.phone}">Phone</td>
+        <td th:text="${applicant.jobsApplied.get(0).applicationStatus}">Pending</td>
+        <td>
+          <form th:action="@{/jobs/{jobId}/update-status/{userId}(jobId=${job.id}, userId=${applicant.id})}" method="post">
+            <select name="status" class="form-select">
+              <option value="Pending">Pending</option>
+              <option value="Reviewed">Reviewed</option>
+              <option value="Accepted">Accepted</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
